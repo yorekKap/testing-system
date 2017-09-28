@@ -1,0 +1,15 @@
+body{
+	background-color: #c8efa6;
+}
+
+.form{
+	background-color: white;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	box-shadow:  0 0 10px rgba(0,0,0,0.5);
+}
+
+.form .form-link{
+	margin-top: 20px;
+	margin-bottom: 20px;
+}

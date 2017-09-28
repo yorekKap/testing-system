@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path = "/">
+    <Resource
+            name="jdbc/testing_system"
+            author="Container"
+            type="javax.sql.DataSource"
+            maxTotal="100"
+            maxIdle="50"
+            maxWaitMilis="5000"
+            username="root"
+            password="root"
+            driverClassName="com.mysql.jdbc.Driver"
+            url="jdbc:mysql://localhost:3306/testing_system?useSSL=false&amp;characterEncoding=utf-8"
+
+    />
+</Context>

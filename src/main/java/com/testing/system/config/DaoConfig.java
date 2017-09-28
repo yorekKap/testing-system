@@ -1,0 +1,35 @@
+package com.testing.system.config;
+
+
+import com.testing.system.dao.factories.DataSourceFactory;
+import com.testing.system.dao.implementation.jdbc.JdbcCategoryDao;
+import com.testing.system.dao.implementation.jdbc.JdbcUserDao;
+import com.testing.system.dao.interfaces.CategoryDao;
+import com.testing.system.dao.interfaces.UserDao;
+import org.apache.log4j.Logger;
+
+import javax.sql.DataSource;
+
+/**
+ * {@link Config} implementation for fulfilling components context
+ * with dao implementations
+ *
+ * @author yuri
+ */
+public class DaoConfig implements Config {
+    private static final Logger log = Logger.getLogger(DaoConfig.class);
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void init(Components components) {
+        DataSource dataSource = DataSourceFactory.getDataSource(DataSourceFactory.MY_SQL);
+
+        components
+                .add(UserDao.class, new JdbcUserDao(dataSource))
+                .add(CategoryDao.class, new JdbcCategoryDao(dataSource));
+
+        log.info("Dao components added");
+    }
+}
