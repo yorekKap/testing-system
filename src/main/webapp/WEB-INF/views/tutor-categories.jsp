@@ -11,6 +11,7 @@
 <fmt:message key="tutor.categories.create-new-category" var="createNewCategory"/>
 <fmt:message key="tutor.categories.open-to-all" var="openToAll"/>
 <fmt:message key="tutor.categories.delete-category" var="deleteCategory"/>
+<fmt:message key="tutor.categories.show-category-tests" var="showCategoryTests"/>
 
 
 <html>
@@ -22,17 +23,7 @@
 <body>
 <div id="wrapper" class="toggled">
 
-    <!-- Sidebar -->
-    <div id="sidebar-wrapper">
-        <ul class="sidebar-nav">
-            <li class="sidebar-brand">
-                <a href="/tutor/category">
-                    Categories
-                </a>
-            </li>
-        </ul>
-    </div>
-    <!-- /#sidebar-wrapper -->
+    <%@ include file="/resources/jspf/sidebar.jspf" %>
 
     <!-- Page Content -->
     <div id="page-content-wrapper">
@@ -43,12 +34,14 @@
                     <form class="form-inline">
                         <div class="form-group">
                             <label for="category-title">${newCategoryTitle}</label>
-                            <input class="form-control" type="text" id="category-title" rv-value="data.newCategoryTitle">
+                            <input class="form-control" type="text" id="category-title"
+                                   rv-value="data.newCategoryTitle">
                         </div>
                         <div class="checkbox">
                             <label><input type="checkbox" rv-checked="data.openToAll">${openToAll}</label>
                         </div>
-                        <button class="btn btn-default" rv-on-click="controller.createNewCategory">${createNewCategory}</button>
+                        <button class="btn btn-default"
+                                rv-on-click="controller.createNewCategory">${createNewCategory}</button>
                     </form>
 
                     <c:if test="${empty categoryAccessRights}">
@@ -63,8 +56,13 @@
                                         Rights: ${categoryAccess.accessRight}
                                         Is Open: ${categoryAccess.category.openToAll}
                                     </p>
-                                    <button class="btn btn-default" data-category-id="${categoryAccess.category.id}"
+                                    <button class="btn btn-default"
+                                            data-category-id="${categoryAccess.category.id}"
                                             rv-on-click="controller.deleteCategory">${deleteCategory}</button>
+                                    <a class="btn btn-default"
+                                       href="/tutor/category/tests?categoryId=${categoryAccess.category.id}">
+                                            ${showCategoryTests}
+                                    </a>
                                 </li>
                             </c:forEach>
                         </ul>
@@ -76,7 +74,6 @@
         </div>
     </div>
     <!-- /#page-content-wrapper -->
-
 </div>
 
 

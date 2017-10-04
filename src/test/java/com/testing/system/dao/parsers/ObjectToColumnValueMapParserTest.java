@@ -1,7 +1,6 @@
 package com.testing.system.dao.parsers;
-
-import com.testing.system.oldentities.User;
-import com.testing.system.oldentities.enums.Role;
+import com.testing.system.entities.User;
+import com.testing.system.entities.enums.Role;
 import org.junit.Test;
 
 import java.util.Date;
@@ -25,7 +24,7 @@ public class ObjectToColumnValueMapParserTest {
 	private static final String PHONE = "380673255791";
 	private static final Long TARIFF_ID = new Long(1);
 	private static final double BALANCE = 100;
-	private static final Role ROLE = Role.USER;
+	private static final Role ROLE = Role.STUDENT;
 
 
 	User user;
@@ -35,7 +34,7 @@ public class ObjectToColumnValueMapParserTest {
 	public void parse() {
 		initUserAndExpectedMap();
 
-		Map<String, Object> actualMap = ObjectToColumnValueMapParser.parse(user, User.class);
+		Map<String, Object> actualMap = ObjectToColumnValueMapParser.parse(user);
 
 		assertEquals(expectedMap.get(FIRST_NAME_COLUMN), actualMap.get(FIRST_NAME_COLUMN) );
 		assertEquals(expectedMap.get(REGISTRATION_DATE_COLUMN), actualMap.get(REGISTRATION_DATE_COLUMN));
@@ -54,9 +53,6 @@ public class ObjectToColumnValueMapParserTest {
 		user.setUsername(USERNAME);
 		user.setPhone(PHONE);
 		user.setPassword(PASSWORD);
-		user.setTariffId(TARIFF_ID);
-		user.setRegistrationDate(date);
-		user.setBalance(BALANCE);
 		user.setUserRole(ROLE);
 
 		expectedMap = new HashMap<>();

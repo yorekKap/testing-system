@@ -24,11 +24,6 @@ public class JdbcCategoryDao extends AbstractJdbcDaoAdapter<Category> implements
     }
 
     @Override
-    public Map<String, Object> getValuesMap(Category object) {
-        return ObjectToColumnValueMapParser.parse(object);
-    }
-
-    @Override
     public List<TutorCategoryAccessRight> getCategoriesWithRightsByTutorId(Long userId) {
         return builder.select("*")
                 .from(DaoUtils.getTableName(TutorCategoryAccessRight.class) + " accessRight")
@@ -47,19 +42,21 @@ public class JdbcCategoryDao extends AbstractJdbcDaoAdapter<Category> implements
         try {
             builder.beginTransaction();
             builder.insert()
-                    .setValue("title", categoryTitle)
-                    .setValue("open_to_all", openToAll)
+                    .newValuesList()
+                    .addValue("title", categoryTitle)
+                    .addValue("open_to_all", openToAll)
                     .execute();
 
-            categoryId = findLastSavedId();
+            categoryId = getLastSavedId();
 
             builder.insert()
                     .into("tutors_categories_access_rights")
-                    .setValue("category_id", categoryId)
-                    .setValue("tutor_id", userId)
-                    .setValue("access_right", AccessRight.RW.toString())
+                    .newValuesList()
+                    .addValue("category_id", categoryId)
+                    .addValue("tutor_id", userId)
+                    .addValue("access_right", AccessRight.RW.toString())
                     .execute();
-
+            
             builder.commit();
         }catch (Exception e){
             builder.rollback();
@@ -69,4 +66,19 @@ public class JdbcCategoryDao extends AbstractJdbcDaoAdapter<Category> implements
         return new Category(categoryId, categoryTitle, openToAll);
     }
 
+    @Override
+    public List<Category> findCategoriesOpenForStudentId(Long studentId) {
+        return builder.select("*")
+                .from("categories c")
+
+                .leftJoin("categories_groups cg")
+                .on("c.id", "cg.category_id")
+                .leftJoin("students_groups sg")
+                .on("cg.group_id", "sg.group_id")
+
+                .where("sg.student_id").isEquals(studentId)
+                .or("c.open_to_all").isEquals(1)
+                .execute(Category.class);
+
+    }
 }

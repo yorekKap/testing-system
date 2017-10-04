@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class CategoryServiceImpl implements CategoryService {
 
-    CategoryDao categoryDao;
+    private CategoryDao categoryDao;
 
     public CategoryServiceImpl(CategoryDao categoryDao) {
         this.categoryDao = categoryDao;
@@ -31,5 +31,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteCategory(Long categoryId) {
         categoryDao.delete(categoryId);
+    }
+
+    @Override
+    public List<Category> getCategoriesOpenForStudentId(Long studentId) {
+        return categoryDao.findCategoriesOpenForStudentId(studentId);
     }
 }

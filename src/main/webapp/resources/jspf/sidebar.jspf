@@ -1,0 +1,14 @@
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+    <div class="sidebar-nav">
+        <div class="sidebar-brand">
+            <a href="/tutor/category">
+                Categories
+            </a>
+        </div>
+    </div>
+
+    <div style="margin-top: 600px">
+        <a href="/logout">Logout</a>
+    </div>
+</div>

@@ -12,6 +12,8 @@ public interface CategoryDao extends GenericDao<Category, Long> {
     List<TutorCategoryAccessRight> getCategoriesWithRightsByTutorId(Long userId);
 
     Category createCategory(String categoryTitle, Boolean openToAll, Long userId);
+
+    List<Category> findCategoriesOpenForStudentId(Long studentId);
 }
 
 

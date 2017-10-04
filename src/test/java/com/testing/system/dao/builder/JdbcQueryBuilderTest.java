@@ -1,6 +1,5 @@
 package com.testing.system.dao.builder;
 
-import com.testing.system.oldentities.Service;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -23,23 +22,6 @@ public class JdbcQueryBuilderTest {
 		when(mockDataSource.getConnection()).thenReturn(mockConnection);
 
 		builder = new JdbcQueryBuilder(mockDataSource);
-	}
-
-	@Test
-	public void insert() {
-		String expectedQuery = "INSERT INTO services(cost, description, title) VALUES (?, ?, ?) ;";
-		Service service = new Service();
-		service.setTitle("Repair something");
-		service.setDescription("Master will come and repair something for you");
-		service.setCost(20.5);
-
-		String query =  builder.insert().into("services")
-							  	.setValue("title", service.getTitle())
-							  	.setValue("description", service.getDescription())
-							  	.setValue("cost", service.getCost())
-							  	.toString();
-
-		assertEquals(expectedQuery, query);
 	}
 
 	@Test

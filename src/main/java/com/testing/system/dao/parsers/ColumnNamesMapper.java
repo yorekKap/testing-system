@@ -27,14 +27,15 @@ public class ColumnNamesMapper {
     }
 
     public Integer getColumnIndex(String columnName) {
-        String fullColumnName = tableName + "." + columnName;
-        Integer index = columns.get(fullColumnName);
-        if(index == null){
-            throw new MySQLException("No " + fullColumnName + " in result set");
+        String fullColumnName = null;
+        if (columnName.contains(".")) {
+            fullColumnName = columnName;
+        } else {
+            fullColumnName = tableName + "." + columnName;
         }
+
+        Integer index = columns.get(fullColumnName);
 
         return index;
     }
-
-
 }

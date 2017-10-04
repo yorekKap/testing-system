@@ -11,26 +11,17 @@ import java.util.Map;
  * DAO class for managing {@link User} oldentities
  *
  * @author yuri
- *
  */
 public class JdbcUserDao extends AbstractJdbcDaoAdapter<User> implements UserDao {
 
-	public JdbcUserDao(DataSource dataSource) {
-		super(dataSource, User.class);
-	}
+    public JdbcUserDao(DataSource dataSource) {
+        super(dataSource, User.class);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Map<String, Object> getValuesMap(User object) {
-		return ObjectToColumnValueMapParser.parse(object);
-	}
-
-	@Override
-	public User findByUsername(String username) {
-		return builder.select("*")
-				.where("username").isEquals(username)
-				.executeForSingle(User.class);
-	}
+    @Override
+    public User findByUsername(String username) {
+        return builder.select("*")
+                .where("username").isEquals(username)
+                .executeForSingle(User.class);
+    }
 }

@@ -1,6 +1,7 @@
 package com.testing.system.web.controllers.authorization;
 
 import com.testing.system.web.dispatcher.Controller;
+import com.testing.system.web.dispatcher.RequestService;
 import com.testing.system.web.security.UserPrincipal;
 import org.apache.log4j.Logger;
 
@@ -15,13 +16,13 @@ public class LogoutController extends Controller {
 	private static final String LOGIN_URL = "/login";
 
 	@Override
-	public String get(HttpServletRequest request, HttpServletResponse response) {
-		String username = ((UserPrincipal)request.getSession().getAttribute(PRINCIPAL)).getUsername();
-		request.getSession().removeAttribute(PRINCIPAL);
+	public String get(RequestService requestService) {
+		String username = ((UserPrincipal)getRequest().getSession().getAttribute(PRINCIPAL)).getUsername();
+		getRequest().getSession().removeAttribute(PRINCIPAL);
 		log.info("User: " + username + " has logged out");
 
 		try {
-			response.sendRedirect(LOGIN_URL);
+			getResponse().sendRedirect(LOGIN_URL);
 		} catch (IOException e) {
 			log.error("IOException in LogoutController:", e);
 			e.printStackTrace();

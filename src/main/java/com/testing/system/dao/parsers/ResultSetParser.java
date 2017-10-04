@@ -59,7 +59,7 @@ public class ResultSetParser {
     public <T extends Identified<Long>> List<T> parse(Class<T> clazz) {
         try {
             return parse(clazz, null, null);
-        }finally {
+        } finally {
             try {
                 rs.close();
             } catch (SQLException e) {
@@ -118,9 +118,15 @@ public class ResultSetParser {
         Field idField = getIdField(clazz, columnNamesMapper);
         idField.setAccessible(true);
 
+        Integer columnIndex = columnNamesMapper
+                .getColumnIndex(idField.getAnnotation(Id.class).name());
+
+        if(columnIndex == null){
+            return null;
+        }
+
         //null id checking
-        Integer intId = (Integer) rs.getObject(columnNamesMapper
-                .getColumnIndex(idField.getAnnotation(Id.class).name()));
+        Integer intId = (Integer) rs.getObject(columnIndex);
         if (intId == null) {
             return null;
         }
@@ -172,6 +178,8 @@ public class ResultSetParser {
             value = parseOneToMany(field, actualObject, ignoredOneToMany);
         } else if (field.isAnnotationPresent(ManyToOne.class)) {
             value = parseManyToOne(field, columnNamesMapper, actualObject);
+        } else if (field.isAnnotationPresent(ManyToMany.class)){
+            value = parseManyToMany(field, actualObject);
         }
 
         return value;
@@ -182,6 +190,20 @@ public class ResultSetParser {
         Method valueOf = enumClass.getDeclaredMethod("valueOf", String.class);
 
         return valueOf.invoke(null, value);
+    }
+
+    private Object parseManyToMany(Field field, Identified<Long> actualObject) {
+        ManyToMany manyToMany = field.getAnnotation(ManyToMany.class);
+
+        String fullColumnName = manyToMany.table() + "." + manyToMany.mappedBy();
+        Collection<?> value = parse(ReflectionUtils.getGenericType(field),
+                fullColumnName, actualObject.getId());
+
+        if (field.getType() == Set.class) {
+            value = new HashSet(value);
+        }
+
+        return value;
     }
 
     private Object parseOneToMany(Field field, Identified<Long> actualObject, String ignoredOneToMany) {
@@ -207,7 +229,6 @@ public class ResultSetParser {
         }
 
         return value;
-
     }
 
     private Object parseManyToOne(Field field, ColumnNamesMapper columnNamesMapper,

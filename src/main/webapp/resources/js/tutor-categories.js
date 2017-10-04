@@ -11,7 +11,8 @@ var controller = {
             action: "CREATE"
         };
 
-        $.post("/tutor/category", postData).done(function () {
+        $.post("/tutor/category", postData)
+            .then(function (data) {
             location.reload();
         });
     },
@@ -20,7 +21,7 @@ var controller = {
         var id = event.target.dataset.categoryId;
 
         $.post("/tutor/category", {action: "DELETE", categoryId: id})
-            .done(function () {
+            .then(function () {
                 location.reload();
             });
 

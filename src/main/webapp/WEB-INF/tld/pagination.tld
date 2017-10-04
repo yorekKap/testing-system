@@ -18,7 +18,7 @@
 	<name>page</name>
 	<required>true</required>
 	<rtexprvalue>true</rtexprvalue>
-	<type>com.phone.station.web.pagination.PageInfo</type>
+	<type>com.testing.system.web.paginator.PageInfo</type>
 </attribute>
 <attribute>
 	<name>numOfPageIndexes</name>

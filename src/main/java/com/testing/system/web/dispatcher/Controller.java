@@ -19,6 +19,8 @@ public abstract class Controller {
 	public static final String GET = "GET";
 	public static final String POST = "POST";
 
+	private HttpServletRequest request;
+	private HttpServletResponse response;
 
 	/**
 	 * Executes {@code #get(HttpServletRequest, HttpServletResponse)}
@@ -31,14 +33,17 @@ public abstract class Controller {
 	 * @param response - JSP view name
 	 * @return
 	 */
-	public String execute(HttpServletRequest request, HttpServletResponse response) {
-		 	String method = request.getMethod();
+	public final String execute(HttpServletRequest request, HttpServletResponse response) {
+		 	this.request = request;
+		 	this.response = response;
+
+			String method = request.getMethod();
 		 	String view;
 		 	if(method.equals(GET)){
-		 		 view =  get(request, response);
+		 		 view =  get(new RequestService(request));
 		 	}
 		 	else{
-		 		view = post(request, response);
+		 		view = post(new RequestService(request));
 		 	}
 
 		 	return WebAppContext.get(ViewResolver.class).resolve(view);
@@ -50,11 +55,10 @@ public abstract class Controller {
 	 * Is not abstract to give the one who will implement it
 	 * freedom to choose which HTTP methods should his controller support
 	 *
-	 * @param request
-	 * @param response
+	 * @param requestService
 	 * @return view name that will be resolved to the full JSP path
 	 */
-	public String get(HttpServletRequest request, HttpServletResponse response) {
+	public String get(RequestService requestService) {
 		return null;
 	}
 
@@ -64,12 +68,19 @@ public abstract class Controller {
 	 * Is not abstract to give the one who will implement it
 	 * freedom to choose which HTTP methods should his controller support
 	 *
-	 * @param request
-	 * @param response
+	 * @param requestService
 	 * @return view name that will be resolved to the full JSP path
 	 */
-	public String post(HttpServletRequest request, HttpServletResponse response) {
+	public String post(RequestService  requestService) {
 		return null;
+	}
+
+	public final HttpServletRequest getRequest(){
+		return request;
+	}
+
+	public final HttpServletResponse getResponse(){
+		return response;
 	}
 
 }

@@ -3,6 +3,7 @@ package com.testing.system.dao.implementation.jdbc;
 import com.testing.system.dao.builder.JdbcQueryBuilder;
 import com.testing.system.dao.builder.SelectQuery;
 import com.testing.system.dao.interfaces.GenericDao;
+import com.testing.system.dao.parsers.ObjectToColumnValueMapParser;
 import com.testing.system.entities.Identified;
 import com.testing.system.exceptions.dao.MySQLException;
 import com.testing.system.utils.DaoUtils;
@@ -22,19 +23,9 @@ import java.util.Map;
 
 /**
  * @param <T>
- * @param <K>
  * @author yuri
  */
 public abstract class AbstractJdbcDao<T extends Identified<Long>> implements GenericDao<T, Long> {
-
-    /**
-     * Convert entity to values map for it's later
-     * insertion in the UPDATE/INSERT queries
-     *
-     * @param object entity to be converted
-     * @return {@link Map} of column name - mappedBy pairs
-     */
-    public abstract Map<String, Object> getValuesMap(T object);
 
     /**
      * Provide default select query with {@code Join}(if necessary)
@@ -73,13 +64,24 @@ public abstract class AbstractJdbcDao<T extends Identified<Long>> implements Gen
         this.builder.setTableName(tableName);
     }
 
+    /**
+     * Convert entity to values map for it's later
+     * insertion in the UPDATE/INSERT queries
+     *
+     * @param object entity to be converted
+     * @return {@link Map} of column name - mappedBy pairs
+     */
+    public Map<String, Object> getValuesMap(T object){
+        return ObjectToColumnValueMapParser.parse(object);
+    }
+
     @Override
     public boolean persist(T object) {
         try {
             builder.beginTransaction();
 
-            builder.insert().setValues(getValuesMap(object)).execute();
-            Long id = findLastSavedId();
+            builder.insert().addValues(getValuesMap(object)).execute();
+            Long id = getLastSavedId();
 
             builder.commit();
 
@@ -92,7 +94,7 @@ public abstract class AbstractJdbcDao<T extends Identified<Long>> implements Gen
         return true;
     }
 
-    public Long findLastSavedId(){
+    public Long getLastSavedId(){
         String maxId = "max(" + pkColumnName + ")";
         return builder.select(maxId)
                 .executeForSingle(rs -> rs.getLong(1));

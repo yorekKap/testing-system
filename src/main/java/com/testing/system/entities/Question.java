@@ -2,6 +2,7 @@ package com.testing.system.entities;
 
 import com.testing.system.dao.annotations.*;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Set;
  */
 
 @Table("questions")
-public class Question implements Identified<Long>{
+public class Question implements Identified<Long> {
 
     @Id
     private Long id;
@@ -24,10 +25,7 @@ public class Question implements Identified<Long>{
     private Double mark;
 
     @OneToMany(mappedBy = "question_id")
-    private Set<QuestionOption> options;
-
-    @ManyToOne(mappedBy = "test_id")
-    private Test test;
+    private List<QuestionOption> options;
 
     public Long getId() {
         return id;
@@ -61,12 +59,28 @@ public class Question implements Identified<Long>{
         this.mark = mark;
     }
 
-    public Set<QuestionOption> getOptions() {
+    public List<QuestionOption> getOptions() {
         return options;
     }
 
-    public void setOptions(Set<QuestionOption> options) {
+    public void setOptions(List<QuestionOption> options) {
         this.options = options;
+    }
+
+    public boolean isAnsweredCorrectly(List<Long> answerOptions) {
+        int index = -1;
+        for (QuestionOption option : options) {
+            index = answerOptions.indexOf(option.getId());
+
+            if (index == -1 && option.getRight()) {
+                return false;
+            }
+            if (index != -1 && !option.getRight()){
+                return false;
+            }
+        }
+
+        return true;
     }
 
     @Override
@@ -77,7 +91,6 @@ public class Question implements Identified<Long>{
                 ", orderNumber=" + orderNumber +
                 ", mark=" + mark +
                 ", options=" + options +
-                ", test=" + test +
                 '}';
     }
 }

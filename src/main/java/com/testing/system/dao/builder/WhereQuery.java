@@ -111,10 +111,27 @@ public abstract class WhereQuery<T>{
 		return getDowncastedThis();
 	}
 
+	public T in(Object... list){
+		String values = Arrays.stream(list)
+				.map(x -> x.toString())
+				.collect(Collectors.joining(" ,"));
+
+		predicates.append("IN (" + values + ")");
+		return getDowncastedThis();
+	}
+
 	public T notIn(String... list){
 		String values = Arrays.stream(list)
 							  .map(s -> '\'' + s + '\'')
 							  .collect(Collectors.joining(" ,"));
+		predicates.append("NOT IN (" + values + ")");
+		return getDowncastedThis();
+	}
+
+	public T notIn(Object... list){
+		String values = Arrays.stream(list)
+				.map(s -> s.toString())
+				.collect(Collectors.joining(" ,"));
 		predicates.append("NOT IN (" + values + ")");
 		return getDowncastedThis();
 	}

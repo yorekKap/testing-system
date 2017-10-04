@@ -14,4 +14,6 @@ public interface CategoryService {
     Category createCategory(String categoryTitle, Boolean openToAll, Long userId);
 
     void deleteCategory(Long categoryId);
+
+    List<Category> getCategoriesOpenForStudentId(Long studentId);
 }
