@@ -1,8 +1,8 @@
 # phone-station
-### The test project created for EPAM courses
+### The test project
 
 #### TASK
- Telephone station system. Administrator connects subscriber(User). Subscriber can choose one or few of services. Subscriber pays bill for phone talkings and services.Admin can see list of unpayed bills and disconnect subscriber.
+Testing system.Tutor creates tests with several questions of closed type(choosing one of the few options) for particular subject.Student browses list of available tests, answers the questions.
 
 #### REQUIREMENTS FOR IMPLEMENTATION OF THE PROJECT
    1.For information on domain stored in a database (MySQL recommended), for access use JDBC <br />
