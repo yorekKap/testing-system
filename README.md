@@ -1,4 +1,4 @@
-# phone-station
+# testing-system
 ### The test project
 
 #### TASK
