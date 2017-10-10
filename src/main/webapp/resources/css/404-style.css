@@ -97,6 +97,10 @@ body{
 .copy-right p a:hover{
 	color:#666;
 }
+
+.white-icon{
+	color: whitesmoke;
+}
 /*------responive-design--------*/
 @media screen and (max-width: 1366px)	{
 	.content {

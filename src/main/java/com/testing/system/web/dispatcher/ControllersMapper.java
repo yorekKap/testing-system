@@ -54,7 +54,6 @@ public class ControllersMapper {
 			return this;
 		}
 
-
 		/**
 		 * @return initialized {@link ControllersMapper}
 		 */

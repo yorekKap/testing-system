@@ -1,16 +1,16 @@
 package com.testing.system.config;
 
-import com.testing.system.entities.QuestionOption;
 import com.testing.system.service.interfaces.*;
 import com.testing.system.web.controllers.authorization.LoginController;
 import com.testing.system.web.controllers.authorization.LogoutController;
 import com.testing.system.web.controllers.authorization.RegisterController;
-import com.testing.system.web.controllers.common.TestRecordsController;
+import com.testing.system.web.controllers.tutor.CategoriesController;
+import com.testing.system.web.controllers.common.ProfileInfoController;
+import com.testing.system.web.controllers.student.StudentTestRecordsController;
+import com.testing.system.web.controllers.tutor.TutorTestRecordsController;
 import com.testing.system.web.controllers.student.DescribeTestRecordController;
 import com.testing.system.web.controllers.student.PassTestController;
-import com.testing.system.web.controllers.student.StudentCategoriesController;
-import com.testing.system.web.controllers.tutor.CreateNewTestController;
-import com.testing.system.web.controllers.tutor.TutorCategoriesController;
+import com.testing.system.web.controllers.tutor.TutorTestsController;
 import com.testing.system.web.controllers.common.CategoryTestsController;
 import com.testing.system.web.dispatcher.ControllersMapper;
 import com.testing.system.web.resolvers.ViewResolver;
@@ -46,20 +46,23 @@ public class WebConfig implements Config {
         QuestionOptionService questionOptionService = WebAppContext.get(QuestionOptionService.class);
         TestRecordService testRecordService = WebAppContext.get(TestRecordService.class);
 
-        CategoryTestsController categoryTestsController = new CategoryTestsController(testService);
+        CategoryTestsController categoryTestsController = new CategoryTestsController(testService, categoryService);
+        ProfileInfoController profileInfoController = new ProfileInfoController(userService);
 
         ControllersMapper controllersMapper = ControllersMapper.createBuilder()
                 .add("/login", new LoginController(authService))
                 .add("/register", new RegisterController(userService))
                 .add("/logout", new LogoutController())
-                .add("/tutor/category", new TutorCategoriesController(categoryService))
-                .add("/tutor/category/tests", categoryTestsController)
-                .add("/tutor/category/create-test", new CreateNewTestController(testService))
-                .add("/student/category", new StudentCategoriesController(categoryService))
-                .add("/student/category/tests", categoryTestsController)
+                .add("/tutor", profileInfoController)
+                .add("/student", profileInfoController)
+                .add("/tutor/categories", new CategoriesController(categoryService))
+                .add("/tutor/category", categoryTestsController)
+                .add("/tutor/category/test", new TutorTestsController(testService))
+                .add("/tutor/category/test/records", new TutorTestRecordsController(testRecordService))
+                .add("/student/category", categoryTestsController)
                 .add("/student/category/tests/pass-test", new PassTestController(questionService, testService))
                 .add("/student/category/tests/test-record", new DescribeTestRecordController(questionService, questionOptionService))
-                .add("/student/category/tests/test-records", new TestRecordsController(testRecordService))
+                .add("/student/category/tests/test-records", new StudentTestRecordsController(testRecordService))
                 .build();
 
         log.info("ControllersMapper initialized");

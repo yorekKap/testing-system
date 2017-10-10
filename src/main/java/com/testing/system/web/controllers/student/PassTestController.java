@@ -25,8 +25,7 @@ public class PassTestController extends Controller {
 
     @Override
     public String get(RequestService requestService) {
-        Long testId = requestService.getLong("testId")
-                .orElseThrow(() -> new BadRequestException("No testId parameter"));
+        Long testId = requestService.getLong("testId");
 
         requestService.setAttribute("questions",
                 questionService.findByTestId(testId));

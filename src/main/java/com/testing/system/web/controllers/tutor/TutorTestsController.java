@@ -1,6 +1,5 @@
 package com.testing.system.web.controllers.tutor;
 
-import com.sun.org.apache.regexp.internal.RE;
 import com.testing.system.exceptions.web.BadRequestException;
 import com.testing.system.service.interfaces.TestService;
 import com.testing.system.web.dispatcher.Controller;
@@ -14,18 +13,17 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Created by yuri on 29.09.17.
  */
-public class CreateNewTestController extends Controller{
+public class TutorTestsController extends Controller{
 
     private TestService testService;
 
-    public CreateNewTestController(TestService testService) {
+    public TutorTestsController(TestService testService) {
         this.testService = testService;
     }
 
     @Override
     public String get(RequestService requestService) {
-        Long categoryId = requestService.getLong("categoryId")
-                .orElseThrow(() ->new BadRequestException("No categoryId parameter"));
+        Long categoryId = requestService.getLong("categoryId");
 
         requestService.setAttribute("categoryId", categoryId);
         return "create-new-test";
@@ -37,6 +35,10 @@ public class CreateNewTestController extends Controller{
 
         if(actionType == ActionType.CREATE){
             createTest(requestService);
+        } if(actionType == ActionType.UPDATE){
+            updateTest(requestService);
+        } if (actionType == ActionType.DELETE){
+            deleteTest(requestService);
         }
 
         return null;
@@ -47,5 +49,18 @@ public class CreateNewTestController extends Controller{
                 getContentAsObject(CreateTestDto.class);
 
         testService.createTest(createTestDto);
+    }
+
+    public void updateTest(RequestService requestService){
+        String title = requestService.getString("title");
+        Long id = requestService.getLong("id");
+        Integer orderNumber = requestService.getInteger("orderNumber");
+
+        testService.updateTest(id, title, orderNumber);
+    }
+
+    public void deleteTest(RequestService requestService){
+        Long testId = requestService.getLong("testId");
+        testService.deleteTest(testId);
     }
 }

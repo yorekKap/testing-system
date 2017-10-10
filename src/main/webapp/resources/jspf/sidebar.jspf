@@ -1,14 +1,83 @@
 <!-- Sidebar -->
-<div id="sidebar-wrapper">
-    <div class="sidebar-nav">
-        <div class="sidebar-brand">
-            <a href="/tutor/category">
-                Categories
-            </a>
+<div id="sidebar">
+    <div id="sidebar-wrapper">
+        <div class="sidebar-nav">
+            <div class="sidebar-brand">
+                <p>
+                    ${categoriesTitle}
+                    <s:se requiredRole="TUTOR">
+                    <i class="btn fa fa-plus white-icon"
+                       data-toggle="modal" data-target="#create-new-category-modal"></i>
+                    </s:se>
+                <p/>
+                <c:forEach var="category" items="${applicationScope.categoryContainer.categories}">
+                    <div>
+                        <s:se requiredRole="STUDENT">
+                            <c:if test="${sessionScope.currentCategoryId eq category.id}">
+                                <a class="current-category" href="/student/category?categoryId=${category.id}">
+                                        ${category.title}
+                                </a>
+                            </c:if>
+                            <c:if test="${sessionScope.currentCategoryId ne category.id}">
+                                <a href="/student/category?categoryId=${category.id}">
+                                        ${category.title}
+                                </a>
+                            </c:if>
+                        </s:se>
+                        <s:se requiredRole="TUTOR">
+                            <c:if test="${sessionScope.currentCategoryId eq category.id}">
+                                <a class="current-category" href="/tutor/category?categoryId=${category.id}">
+                                        ${category.title}
+                                </a>
+                            </c:if>
+                            <c:if test="${sessionScope.currentCategoryId ne category.id}">
+                                <a href="/tutor/category?categoryId=${category.id}">
+                                        ${category.title}
+                                </a>
+                                <i class="btn fa fa-times"
+                                   data-category-id="${category.id}"
+                                   rv-on-click="controller.deleteCategory"></i>
+                            </c:if>
+
+                        </s:se>
+                    </div>
+                </c:forEach>
+            </div>
         </div>
+
+        <div style="margin-top: 600px; text-align: center">
+            <a href="/logout">Logout</a><br/>
+            <a href="#" onclick="changeLang('ua')">ua</a>|<a href="#" onclick="changeLang('en')">en</a>
+        </div>
+
+
     </div>
 
-    <div style="margin-top: 600px">
-        <a href="/logout">Logout</a>
+    <div id="create-new-category-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">${createNewCategory}</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <label for="category-title">${newCategoryTitle}</label>
+                            <input class="form-control" type="text" id="category-title"
+                                   rv-value="data.newCategoryTitle">
+                        </div>
+                        <button class="btn btn-default" type="button"
+                                rv-on-click="controller.createNewCategory">${createNewCategory}</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>
+<script src="/resources/js/sidebar.js"></script>
+<script src="/resources/js/categories.js"></script>

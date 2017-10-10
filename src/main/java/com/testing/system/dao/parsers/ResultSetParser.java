@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * Created by yuri on 23.09.17.
  */
 public class ResultSetParser {
-    private static final Logger log = Logger.getLogger(OldResultSetParser.class);
+    private static final Logger log = Logger.getLogger(ResultSetParser.class);
 
     private ResultSet rs;
     private Map<String, Integer> columns = new HashMap<>();
@@ -51,7 +51,7 @@ public class ResultSetParser {
             log.info("Columns map is initialized");
 
         } catch (SQLException e) {
-            log.error("SQLException in OldResultSetParser : ", e);
+            log.error("SQLException in ResultSetParser : ", e);
             e.printStackTrace();
         }
     }

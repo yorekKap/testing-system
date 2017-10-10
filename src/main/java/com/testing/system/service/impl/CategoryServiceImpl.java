@@ -2,7 +2,6 @@ package com.testing.system.service.impl;
 
 import com.testing.system.dao.interfaces.CategoryDao;
 import com.testing.system.entities.Category;
-import com.testing.system.entities.TutorCategoryAccessRight;
 import com.testing.system.service.interfaces.CategoryService;
 
 import java.util.List;
@@ -19,13 +18,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<TutorCategoryAccessRight> getCategoriesWithRightsByTutorId(Long userId) {
-        return categoryDao.getCategoriesWithRightsByTutorId(userId);
+    public Category createCategory(String categoryTitle, Long userId) {
+        return categoryDao.createCategory(categoryTitle, userId);
     }
 
     @Override
-    public Category createCategory(String categoryTitle, Boolean openToAll, Long userId) {
-        return categoryDao.createCategory(categoryTitle, openToAll, userId);
+    public void updateCategory(String title, Long id) {
+        categoryDao.update(new Category(id, title));
     }
 
     @Override
@@ -34,7 +33,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> getCategoriesOpenForStudentId(Long studentId) {
-        return categoryDao.findCategoriesOpenForStudentId(studentId);
+    public List<Category> getAllCategories() {
+        return categoryDao.findAll();
+    }
+
+    @Override
+    public Category findById(Long id) {
+        return categoryDao.findByPK(id);
     }
 }

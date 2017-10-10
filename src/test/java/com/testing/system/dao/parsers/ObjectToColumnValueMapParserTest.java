@@ -53,7 +53,7 @@ public class ObjectToColumnValueMapParserTest {
 		user.setUsername(USERNAME);
 		user.setPhone(PHONE);
 		user.setPassword(PASSWORD);
-		user.setUserRole(ROLE);
+		user.setRole(ROLE);
 
 		expectedMap = new HashMap<>();
 		expectedMap.put(FIRST_NAME_COLUMN, FIRST_NAME);

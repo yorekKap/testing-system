@@ -9,5 +9,6 @@ import java.util.List;
  */
 public interface QuestionService {
     List<Question> findByTestId(Long testId);
+
     List<Question> findByTestRecordId(Long testRecordId);
 }

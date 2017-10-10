@@ -16,16 +16,12 @@ public class Category implements Identified<Long>{
     @Column("title")
     private String title;
 
-    @Column("open_to_all")
-    private Boolean openToAll;
-
     public Category() {
     }
 
-    public Category(Long id, String title, Boolean openToAll) {
+    public Category(Long id, String title) {
         this.id = id;
         this.title = title;
-        this.openToAll = openToAll;
     }
 
     public Long getId() {
@@ -42,13 +38,5 @@ public class Category implements Identified<Long>{
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public Boolean getOpenToAll() {
-        return openToAll;
-    }
-
-    public void setOpenToAll(Boolean openToAll) {
-        this.openToAll = openToAll;
     }
 }

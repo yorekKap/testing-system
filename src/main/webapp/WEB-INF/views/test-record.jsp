@@ -1,20 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8" isELIgnored="false" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="utils" uri="mytags.com/utils" %>
-<fmt:setLocale value="${locale}"/>
-<fmt:setBundle basename="lang"/>
+<%@ include file="/resources/jspf/jsp-setup.jspf" %>
 
 <fmt:message key="student.pass-test.title" var="title"/>
 <fmt:message key="student.pass-test.send-result" var="sendResult"/>
-
 
 <html>
 <head>
     <title>${title}</title>
     <%@ include file="/resources/jspf/setup.jspf" %>
-    <link href="/resources/css/style.css" rel="stylesheet" type="text/css">
     <link href="/resources/css/test-record.css" rel="stylesheet" type="text/css">
 </head>
 <body>

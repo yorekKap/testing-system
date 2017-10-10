@@ -11,9 +11,11 @@ import com.testing.system.entities.User;
 
 /**
  * @author yuri
- *
  */
 public interface UserService {
     boolean save(User user);
+
+    User findById(Long id);
+
     User findByUsername(String username);
 }

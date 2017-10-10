@@ -19,6 +19,14 @@ public class Test implements Identified<Long> {
     @Column("order_number")
     private Integer orderNumber;
 
+    public Test() {}
+
+    public Test(Long id, String title, Integer orderNumber) {
+        this.id = id;
+        this.title = title;
+        this.orderNumber = orderNumber;
+    }
+
     public Long getId() {
         return id;
     }

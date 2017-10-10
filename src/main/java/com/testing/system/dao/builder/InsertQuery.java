@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
  *
  * @author yuri
  */
-public class InsertQuery {
+public class  InsertQuery {
     private final static Logger log = Logger.getLogger(InsertQuery.class);
 
     private Connection connection;

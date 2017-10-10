@@ -11,6 +11,12 @@ import java.util.List;
  */
 public interface TestService {
     List<Test> findAllByCategoryId(Long categoryId);
+
     void createTest(CreateTestDto createTestDto);
+
     Long passTest(Long userId, Long testId, List<Long> selectedOptionIds);
+
+    void updateTest(Long id, String title, Integer orderNumber);
+
+    void deleteTest(Long testId);
 }

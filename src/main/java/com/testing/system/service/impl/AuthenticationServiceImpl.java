@@ -8,31 +8,30 @@ import com.testing.system.web.security.UserPrincipal;
 import org.apache.log4j.Logger;
 
 public class AuthenticationServiceImpl implements AuthenticationService {
-	private static final Logger log = Logger.getLogger(AuthenticationServiceImpl.class);
+    private static final Logger log = Logger.getLogger(AuthenticationServiceImpl.class);
 
-	UserDao userDao;
+    UserDao userDao;
 
-	public AuthenticationServiceImpl(UserDao userDao) {
-		this.userDao = userDao;
-	}
+    public AuthenticationServiceImpl(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
-	@Override
-	public UserPrincipal login(String username, String password)throws AuthenticationException {
-		User user = userDao.findByUsername(username);
+    @Override
+    public UserPrincipal login(String username, String password) throws AuthenticationException {
+        User user = userDao.findByUsername(username);
 
-		if (user == null) {
-			log.warn("Login failed: wrong username");
-			throw new AuthenticationException(AuthenticationException.WRONG_USERNAME);
-		}
-		if (!user.getPassword().equals(password)) {
-			log.warn("Login failed: wrong password");
-			throw new AuthenticationException(AuthenticationException.WRONG_PASSWORD);
-		}
+        if (user == null) {
+            log.warn("Login failed: wrong username");
+            throw new AuthenticationException(AuthenticationException.WRONG_USERNAME);
+        }
+        if (!user.getPassword().equals(password)) {
+            log.warn("Login failed: wrong password");
+            throw new AuthenticationException(AuthenticationException.WRONG_PASSWORD);
+        }
 
-		log.info("UserPricipal with username: " + username + ";password: " + password + " is created");
-		return new UserPrincipal(username, user.getUserRole(), user.getId());
-	}
-
+        log.info("UserPricipal with username: " + username + ";password: " + password + " is created");
+        return new UserPrincipal(username, user.getRole(), user.getId());
+    }
 
 
 }

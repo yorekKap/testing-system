@@ -44,6 +44,10 @@ public class UpdateQuery extends WhereQuery<UpdateQuery> {
                 statement.setObject(i++, o);
             }
 
+            for(Object o : getPredicatesValues()){
+                statement.setObject(i++, o);
+            }
+
             log.info(statement.toString() + " Update statement executing");
             return statement.executeUpdate();
 
@@ -69,7 +73,7 @@ public class UpdateQuery extends WhereQuery<UpdateQuery> {
                 .toArray(size -> new String[size]);
 
         sqlBuilder.append(String.join(", ", columns));
-        sqlBuilder.append(predicates.toString()).append(";");
+        sqlBuilder.append(getPredicatesWithQuestionMarks()).append(";");
         return sqlBuilder.toString();
     }
 }

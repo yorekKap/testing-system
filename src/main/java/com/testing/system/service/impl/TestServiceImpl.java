@@ -53,16 +53,25 @@ public class TestServiceImpl implements TestService {
         String mark = getTestRecordMark(maxMark, actualMark);
 
         return testRecordDao.saveTestRecordWithAnswers(userId, testId,
-                mark,  selectedOptionIds);
+                mark, selectedOptionIds);
     }
 
-    private String getTestRecordMark(double maxMark, double actualMark){
-        if(maxMark % 1 == 0){
-            return (int)actualMark + "/" + (int)maxMark;
+    private String getTestRecordMark(double maxMark, double actualMark) {
+        if (maxMark % 1 == 0) {
+            return (int) actualMark + "/" + (int) maxMark;
         } else {
             DecimalFormat df = new DecimalFormat("#.##");
             return df.format(actualMark) + "/" + df.format(maxMark);
         }
     }
 
+    @Override
+    public void updateTest(Long id, String title, Integer orderNumber) {
+        testDao.update(new Test(id, title, orderNumber));
+    }
+
+    @Override
+    public void deleteTest(Long testId) {
+        testDao.delete(testId);
+    }
 }

@@ -1,6 +1,8 @@
 package com.testing.system.dao.builder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -17,11 +19,15 @@ import java.util.stream.Collectors;
 public abstract class WhereQuery<T>{
 
 	protected Class<T> clazz;
-	protected StringBuilder predicates;
+
+	private StringBuilder predicatesWithQuestionMarks;
+	private List<Object> predicatesValues;
+
 
 	public WhereQuery(Class<T> clazz) {
 		this.clazz = clazz;
-		predicates = new StringBuilder();
+		predicatesWithQuestionMarks = new StringBuilder();
+		predicatesValues = new ArrayList<>();
 	}
 
 	private T getDowncastedThis(){
@@ -29,117 +35,124 @@ public abstract class WhereQuery<T>{
 	}
 
 	public WhereQuery<T> where(String columnName){
-		predicates.append(" WHERE " + columnName + " ");
+		predicatesWithQuestionMarks.append(" WHERE " + columnName + " ");
 		return this;
 	}
 
-	public T isEquals(String str){
-		predicates.append(" = \'" + str + '\'');
+	public T isEqualVariable(String variable){
+		predicatesWithQuestionMarks.append(" = " + variable);
 		return getDowncastedThis();
 	}
 
-	public T isEquals(Number value){
-		predicates.append(" = " +  value.doubleValue());
+	public T isEquals(Object obj){
+		predicatesWithQuestionMarks.append(" = ? ");
+		predicatesValues.add(obj);
+
 		return getDowncastedThis();
 	}
 
-	public T isNotEquals(String str){
-		predicates.append(" != \'" + str + '\'');
+	public T isNotEquals(Object obj){
+		predicatesWithQuestionMarks.append(" != ?");
+		predicatesValues.add(obj);
+
 		return getDowncastedThis();
 	}
 
-	public T isNotEquals(Number value){
-		predicates.append(" != " +  value.doubleValue());
-		return getDowncastedThis();
-	}
 
 	public T isNull(){
-		predicates.append(" IS NULL ");
+		predicatesWithQuestionMarks.append(" IS NULL ");
 		return getDowncastedThis();
 	}
 
 	public T isNotNull(){
-		predicates.append(" IS NOT NULL");
+		predicatesWithQuestionMarks.append(" IS NOT NULL");
 		return getDowncastedThis();
 	}
 
 	public T less(Number value){
-		predicates.append("<" + value.doubleValue());
+		predicatesWithQuestionMarks.append(" < ?" );
+		predicatesValues.add(value);
+
 		return getDowncastedThis();
 	}
 
 	public T lessOrEquals(Number value){
-		predicates.append("<=" + value.doubleValue());
+		predicatesWithQuestionMarks.append(" <= ? ");
+		predicatesValues.add(value);
+
 		return getDowncastedThis();
 	}
 
 	public T greater(Number value){
-		predicates.append(">" + value.doubleValue());
+		predicatesWithQuestionMarks.append(" > ? ");
+		predicatesValues.add(value);
+
 		return getDowncastedThis();
 	}
 
 	public T greaterOrEquals(Number value){
-		predicates.append("<=" + value.doubleValue());
+		predicatesWithQuestionMarks.append(" <= ? ");
+		predicatesValues.add(value);
+
 		return getDowncastedThis();
 	}
 
 	public T beetween(Number min, Number max){
-		predicates.append(" BETWEEN " + min + " AND " + max);
+		predicatesWithQuestionMarks.append(" BETWEEN ? AND ? ");
+		predicatesValues.add(min);
+		predicatesValues.add(max);
+
 		return getDowncastedThis();
 	}
 
 	public T notBeetween(Number min, Number max){
-		predicates.append(" NOT BETWEEN " + min + " AND " + max);
+		predicatesWithQuestionMarks.append(" NOT BETWEEN ? AND ?");
+		predicatesValues.add(min);
+		predicatesValues.add(max);
+
 		return getDowncastedThis();
 	}
 
 	public T like(String pattern){
-		predicates.append(" LIKE " + "'" +pattern + "'");
+		predicatesWithQuestionMarks.append(" LIKE " + "'" +pattern + "'");
 		return getDowncastedThis();
 	}
 
 	public T notLike(String pattern){
-		predicates.append(" NOT LIKE " + pattern);
-		return getDowncastedThis();
-	}
-
-	public T in(String... list){
-		String values = Arrays.stream(list)
-							  .map(s -> '\'' + s + '\'')
-							  .collect(Collectors.joining(" ,"));
-		predicates.append("IN (" + values + ")");
+		predicatesWithQuestionMarks.append(" NOT LIKE " +  "'" +pattern + "'");
 		return getDowncastedThis();
 	}
 
 	public T in(Object... list){
 		String values = Arrays.stream(list)
-				.map(x -> x.toString())
-				.collect(Collectors.joining(" ,"));
+				.map(s -> "?")
+				.collect(Collectors.joining(", ","(",")"));
 
-		predicates.append("IN (" + values + ")");
-		return getDowncastedThis();
-	}
+		predicatesWithQuestionMarks.append(" IN " + values);
+		predicatesValues.add(Arrays.asList(list));
 
-	public T notIn(String... list){
-		String values = Arrays.stream(list)
-							  .map(s -> '\'' + s + '\'')
-							  .collect(Collectors.joining(" ,"));
-		predicates.append("NOT IN (" + values + ")");
 		return getDowncastedThis();
+
 	}
 
 	public T notIn(Object... list){
 		String values = Arrays.stream(list)
-				.map(s -> s.toString())
-				.collect(Collectors.joining(" ,"));
-		predicates.append("NOT IN (" + values + ")");
+				.map(s -> "?")
+				.collect(Collectors.joining(", ","(",")"));
+
+		predicatesWithQuestionMarks.append(" IN " + values);
+		predicatesValues.add(Arrays.asList(list));
+
 		return getDowncastedThis();
 	}
 
 	public T in(SelectQuery innerQuery){
 		String innerSelect = innerQuery.toString().trim();
 		innerSelect = innerSelect.substring(0, innerSelect.length() - 1);
-		predicates.append("IN (" + innerSelect + ")");
+
+		predicatesWithQuestionMarks.append("IN (" + innerSelect + ")");
+
+		predicatesValues.add(innerQuery.getPredicatesValues());
 		return getDowncastedThis();
 
 	}
@@ -147,22 +160,32 @@ public abstract class WhereQuery<T>{
 	public T notIn(SelectQuery innerQuery){
 		String innerSelect = innerQuery.toString().trim();
 		innerSelect = innerSelect.substring(0, innerSelect.length() - 1);
-		predicates.append(" NOT IN (" + innerSelect + ")");
-		return getDowncastedThis();
 
+		predicatesWithQuestionMarks.append("NOT IN (" + innerSelect + ")");
+
+		predicatesValues.add(innerQuery.getPredicatesValues());
+		return getDowncastedThis();
 	}
 
 	public WhereQuery<T> and(String columnName){
-		predicates.append(" AND " + columnName);
+		predicatesWithQuestionMarks.append(" AND " + columnName);
 		return this;
 	}
 
 	public WhereQuery<T> or(String columnName){
-		predicates.append(" OR " + columnName);
+		predicatesWithQuestionMarks.append(" OR " + columnName);
 		return this;
 	}
 
+	public StringBuilder getPredicatesWithQuestionMarks() {
+		return predicatesWithQuestionMarks;
+	}
+
+	public List<Object> getPredicatesValues() {
+		return predicatesValues;
+	}
+
 	public String toString(){
-		return predicates.toString();
+		return predicatesWithQuestionMarks.toString();
 	}
 }

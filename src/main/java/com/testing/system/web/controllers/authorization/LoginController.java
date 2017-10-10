@@ -1,8 +1,11 @@
 package com.testing.system.web.controllers.authorization;
 
+import com.testing.system.entities.Category;
 import com.testing.system.entities.enums.Role;
 import com.testing.system.exceptions.service.AuthenticationException;
 import com.testing.system.service.interfaces.AuthenticationService;
+import com.testing.system.service.interfaces.CategoryService;
+import com.testing.system.web.constants.SessionScopeAttributes;
 import com.testing.system.web.dispatcher.Controller;
 import com.testing.system.web.dispatcher.RequestService;
 import com.testing.system.web.dto.UserLoginDto;
@@ -13,6 +16,7 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 public class LoginController extends Controller {
     private static final Logger log = Logger.getLogger(LoginController.class);
@@ -38,15 +42,15 @@ public class LoginController extends Controller {
         UserPrincipal principal = null;
         try {
             principal = authService.login(userLogin.getUsername(), userLogin.getPassword());
-            getRequest().getSession().setAttribute("principal", principal);
+            getRequest().getSession().setAttribute(SessionScopeAttributes.PRINCIPAL, principal);
             getRequest().getSession().setMaxInactiveInterval(20 * 60);
 
             if (principal.getRole() == Role.TUTOR) {
-                getResponse().sendRedirect("/tutor/category");
+                getResponse().sendRedirect("/tutor");
                 log.info("Tutor " + principal.getUsername() +
                         " has been logged in");
             } else {
-                getResponse().sendRedirect("/student/category");
+                getResponse().sendRedirect("/student");
                 log.info("Student " + principal.getUsername() +
                         " has been logged in");
             }
@@ -54,8 +58,8 @@ public class LoginController extends Controller {
 
         } catch (AuthenticationException e) {
             requestService.setAttribute(FAIL, e.getReason());
-            requestService.setAttribute("fpassword", userLogin.getUsername());
-            requestService.setAttribute("fusername", userLogin.getPassword());
+            requestService.setAttribute("fpassword", userLogin.getPassword());
+            requestService.setAttribute("fusername", userLogin.getUsername());
 
             log.info("Login failed for username: " + userLogin.getUsername() +
                     ";password: " + userLogin.getPassword());
@@ -64,6 +68,5 @@ public class LoginController extends Controller {
             log.error("IOException in LoginController:", e);
             throw new RuntimeException(e.getMessage());
         }
-
     }
 }

@@ -112,7 +112,7 @@ public abstract class AbstractJdbcDao<T extends Identified<Long>> implements Gen
     @Override
     public List<T> findAll() {
         SelectQuery query = builder.select("*")
-                .from(pkColumnName);
+                .from(tableName);
         provideInnerJoin(query);
         provideOrdering(query);
 
@@ -131,7 +131,7 @@ public abstract class AbstractJdbcDao<T extends Identified<Long>> implements Gen
 
     @Override
     public void update(T object) {
-        builder.update(pkColumnName)
+        builder.update(tableName)
                 .setValuesMap(getValuesMap(object))
                 .where(pkColumnName).isEquals(object.getId())
                 .execute();

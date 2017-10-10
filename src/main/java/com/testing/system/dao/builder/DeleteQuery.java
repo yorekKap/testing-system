@@ -4,6 +4,7 @@ import com.testing.system.exceptions.dao.MySQLDeleteException;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -31,10 +32,15 @@ public class DeleteQuery extends WhereQuery<DeleteQuery> {
     }
 
     public int execute() {
-        try (Statement statement = connection.createStatement()) {
-            log.info(toString() + " query executing");
+        try (PreparedStatement statement = connection.prepareStatement(toString())) {
+            log.info(statement.toString() + " query executing");
 
-            return statement.executeUpdate(toString());
+            int i = 1;
+            for(Object obj : getPredicatesValues()){
+                statement.setObject(i++, obj);
+            }
+
+            return statement.executeUpdate();
         } catch (SQLException e) {
             log.error("SQlException in DeleteQuery : ", e);
 
@@ -52,7 +58,7 @@ public class DeleteQuery extends WhereQuery<DeleteQuery> {
 
     public String toString() {
         StringBuilder sqlBuilder = new StringBuilder("DELETE FROM ").append(tableName).append("\n")
-                .append(predicates).append(";");
+                .append(getPredicatesWithQuestionMarks()).append(";");
         return sqlBuilder.toString();
 
     }

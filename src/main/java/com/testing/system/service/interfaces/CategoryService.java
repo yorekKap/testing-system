@@ -1,7 +1,6 @@
 package com.testing.system.service.interfaces;
 
 import com.testing.system.entities.Category;
-import com.testing.system.entities.TutorCategoryAccessRight;
 
 import java.util.List;
 
@@ -9,11 +8,13 @@ import java.util.List;
  * Created by yuri on 27.09.17.
  */
 public interface CategoryService {
-    List<TutorCategoryAccessRight> getCategoriesWithRightsByTutorId(Long userId);
+    Category createCategory(String categoryTitle, Long userId);
 
-    Category createCategory(String categoryTitle, Boolean openToAll, Long userId);
+    void updateCategory(String title, Long id);
 
     void deleteCategory(Long categoryId);
 
-    List<Category> getCategoriesOpenForStudentId(Long studentId);
+    List<Category> getAllCategories();
+
+    Category findById(Long id);
 }

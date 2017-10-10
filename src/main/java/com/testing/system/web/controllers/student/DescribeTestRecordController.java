@@ -23,9 +23,7 @@ public class DescribeTestRecordController extends Controller{
 
     @Override
     public String get(RequestService requestService) {
-        Long testRecordId = requestService.getLong("testRecordId")
-                .orElseThrow(() -> BadRequestExceptionBuilder
-                        .noParameter("testRecordId"));
+        Long testRecordId = requestService.getLong("testRecordId");
 
         requestService.setAttribute("questions",
                 questionService.findByTestRecordId(testRecordId));

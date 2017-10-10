@@ -6,21 +6,26 @@ import com.testing.system.service.interfaces.UserService;
 import org.apache.log4j.Logger;
 
 public class UserServiceImpl implements UserService {
-	private static final Logger log = Logger.getLogger(UserServiceImpl.class);
+    private static final Logger log = Logger.getLogger(UserServiceImpl.class);
 
-	UserDao userDao;
+    UserDao userDao;
 
-	public UserServiceImpl(UserDao userDao) {
-		this.userDao = userDao;
-	}
+    public UserServiceImpl(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
-	@Override
-	public boolean save(User user) {
-		return userDao.persist(user);
-	}
+    @Override
+    public boolean save(User user) {
+        return userDao.persist(user);
+    }
 
-	@Override
-	public User findByUsername(String username) {
-		return userDao.findByUsername(username);
-	}
+    @Override
+    public User findById(Long id) {
+        return userDao.findByPK(id);
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        return userDao.findByUsername(username);
+    }
 }

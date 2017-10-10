@@ -35,7 +35,7 @@ public class User implements Identified<Long>{
 
     @Column("user_role")
     @ParseEnum
-    private Role userRole;
+    private Role role;
 
     @Override
     public Long getId() {
@@ -95,12 +95,12 @@ public class User implements Identified<Long>{
         this.email = email;
     }
 
-    public Role getUserRole() {
-        return userRole;
+    public Role getRole() {
+        return role;
     }
 
-    public void setUserRole(Role userRole) {
-        this.userRole = userRole;
+    public void setRole(Role role) {
+        this.role = role;
     }
 }
 

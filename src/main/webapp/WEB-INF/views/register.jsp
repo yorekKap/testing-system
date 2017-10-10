@@ -25,7 +25,6 @@
     <title>Register</title>
     <%@ include file="/resources/jspf/setup.jspf" %>
     <link rel="stylesheet" type="text/css" href="resources/css/login-style.css"/>
-
 </head>
 <body>
 <a href="/register?lang=ua">ua</a> | <a href="/register?lang=en">en</a>
@@ -68,7 +67,7 @@
             <div class="form-group col-md-11">
                 <label for="password">${password}</label>
                 <input class="form-control" type="password" class="pass" id="password" name="password" required="true"
-                placeholder="${password}" value="${user.password}">
+                       placeholder="${password}" value="${user.password}">
             </div>
 
             <div class="form-group col-md-11">
@@ -79,7 +78,7 @@
 
             <div class="form-group col-md-11">
                 <label for="user-type">${userType}</label>
-                <select class="form-control" id="user-type" name="userRole">
+                <select class="form-control" id="user-type" name="role">
                     <option value="TUTOR">${tutorOption}</option>
                     <option value="STUDENT">${studentOption}</option>
                 </select>
@@ -88,7 +87,8 @@
                 <div class="col-md-4">
                     <button type="submit" class="btn btn-default">Submit</button>
                 </div>
-            </div>        </form>
+            </div>
+        </form>
         <div class="row form-link">
             <div class="col-md-10">
                 <a href="/login">${tologin}</a>

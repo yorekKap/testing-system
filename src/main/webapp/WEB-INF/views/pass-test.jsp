@@ -1,9 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8" isELIgnored="false" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<fmt:setLocale value="${locale}"/>
-<fmt:setBundle basename="lang"/>
+<%@ include file="/resources/jspf/jsp-setup.jspf" %>
 
 <fmt:message key="student.pass-test.title" var="title"/>
 <fmt:message key="student.pass-test.send-result" var="sendResult"/>
@@ -31,8 +26,9 @@
                                 <p> ${question.text}<p>
                                 <c:forEach var="option" items="${question.options}">
                                 <div class="checkbox">
-                                    <label><input type="checkbox" data-option-id="${option.id}"
-                                                  rv-on-click="controller.toggleOption">
+                                    <input id="${option.id}" type="checkbox" data-option-id="${option.id}"
+                                           rv-on-click="controller.toggleOption">
+                                    <label for="${option.id}">
                                             ${option.text}
                                     </label>
                                 </div>

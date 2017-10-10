@@ -45,7 +45,7 @@ var controller = {
     },
 
     createNewTest: function (event, model) {
-        $.post("/tutor/category/create-test", {
+        $.post("/tutor/category/test", {
             action: "CREATE",
             content: JSON.stringify({
                     title: data.testTitle, orderNumber: 1,
@@ -55,12 +55,12 @@ var controller = {
             )
         })
             .then(function () {
-                location.reload();
+                window.location = "/tutor/category?categoryId=" + data.categoryId;
             })
     }
 };
 
-rivets.bind($("#tutor-create-new-test"), {
+rivets.bind($("#create-new-test"), {
     data: data,
     controller: controller
 });

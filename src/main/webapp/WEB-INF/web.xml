@@ -7,6 +7,11 @@
     <display-name>Archetype Created Web Application</display-name>
 
     <filter>
+        <filter-name>XSSFilter</filter-name>
+        <filter-class>com.testing.system.web.filters.xss.XSSFilter</filter-class>
+    </filter>
+
+    <filter>
         <filter-name>CharsetFilter</filter-name>
         <filter-class>com.testing.system.web.filters.CharsetFilter</filter-class>
         <init-param>
@@ -26,6 +31,10 @@
         <filter-class>com.testing.system.web.filters.SecurityFilter</filter-class>
     </filter>
 
+    <filter-mapping>
+        <filter-name>XSSFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <filter-mapping>
         <filter-name>CharsetFilter</filter-name>
@@ -69,6 +78,10 @@
         <error-code>404</error-code>
         <location>/WEB-INF/views/error-pages/error-page-404.jsp</location>
     </error-page>
+    
+    <listener>
+        <listener-class>com.testing.system.web.listeners.TestingSystemContextListener</listener-class>
+    </listener>
 
     <resource-ref>
         <res-ref-name>jdbc/testing_system</res-ref-name>

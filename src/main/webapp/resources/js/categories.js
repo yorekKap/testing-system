@@ -1,26 +1,25 @@
+console.log("FUCK");
 var data = {
     newCategoryTitle: "",
-    openToAll: false
 };
 
 var controller = {
     createNewCategory: function (event, model) {
         var postData = {
-            categoryTitle: data.newCategoryTitle,
-            openToAll: data.openToAll,
+            title: data.newCategoryTitle,
             action: "CREATE"
         };
 
-        $.post("/tutor/category", postData)
+        $.post("/tutor/categories", postData)
             .then(function (data) {
-            location.reload();
-        });
+                location.reload();
+            });
     },
 
     deleteCategory: function (event, model) {
         var id = event.target.dataset.categoryId;
 
-        $.post("/tutor/category", {action: "DELETE", categoryId: id})
+        $.post("/tutor/categories", {action: "DELETE", categoryId: id})
             .then(function () {
                 location.reload();
             });
@@ -28,7 +27,7 @@ var controller = {
     }
 }
 
-rivets.bind($("#tutor-categories"), {
+rivets.bind($("#sidebar"), {
     data: data,
     controller: controller
 });

@@ -78,5 +78,5 @@
 
 
 </body>
-<script src="/resources/js/tutor-categories.js"></script>
+<script src="/resources/js/categories.js"></script>
 </html>
