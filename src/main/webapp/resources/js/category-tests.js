@@ -76,3 +76,4 @@ rivets.bind($("#category-tests"), {
     controller: controller
 });
 
+
