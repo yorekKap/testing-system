@@ -6,7 +6,11 @@ import com.testing.system.entities.TestRecord;
 import java.util.List;
 
 /**
- * Created by yuri on 03.10.17.
+ * Business layer API for convenient support of operations with {@link TestRecord}
+ * entity.
+ *
+ * @author yuri
+ *
  */
 public interface TestRecordService {
     List<TestRecord> findByTestId(Long testId);
@@ -14,5 +18,4 @@ public interface TestRecordService {
     List<TestRecord> findByTestIdAndStudentId(Long testId, Long studentId);
 
     List<TestRecordWithStudentInfoDto> findWithStudentInfoByTestId(Long test);
-
 }

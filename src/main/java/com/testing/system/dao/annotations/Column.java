@@ -7,6 +7,13 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
+
+/**
+ *Tells {@link com.testing.system.dao.parsers.ResultSetParser} to parse field as
+ * column.
+ *
+ * @author yuri
+ */
 public @interface Column {
 	String value();
 }

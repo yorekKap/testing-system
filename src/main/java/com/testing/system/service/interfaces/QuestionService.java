@@ -5,7 +5,11 @@ import com.testing.system.entities.Question;
 import java.util.List;
 
 /**
- * Created by yuri on 01.10.17.
+ * Business layer API for convenient support of operations with {@link Question}
+ * entity.
+ *
+ * @author yuri
+ *
  */
 public interface QuestionService {
     List<Question> findByTestId(Long testId);

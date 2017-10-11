@@ -6,7 +6,9 @@ import com.testing.system.entities.TestRecord;
 import java.util.List;
 
 /**
- * Created by yuri on 01.10.17.
+ * DAO class for managing {@link TestRecord} entities
+ *
+ * @author yuri
  */
 public interface TestRecordDao extends GenericDao<TestRecord, Long> {
     Long saveTestRecordWithAnswers(Long userId, Long testId,

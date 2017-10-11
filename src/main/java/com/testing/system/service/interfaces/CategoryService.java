@@ -4,8 +4,13 @@ import com.testing.system.entities.Category;
 
 import java.util.List;
 
+
 /**
- * Created by yuri on 27.09.17.
+ * Business layer API for convenient support of operations with {@link Category}
+ * entity.
+ *
+ * @author yuri
+ *
  */
 public interface CategoryService {
     Category createCategory(String categoryTitle, Long userId);

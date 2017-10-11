@@ -10,9 +10,6 @@ import javax.sql.DataSource;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by yuri on 01.10.17.
- */
 public class JdbcTestRecordDao extends AbstractJdbcDaoAdapter<TestRecord> implements TestRecordDao {
 
     public JdbcTestRecordDao(DataSource dataSource) {

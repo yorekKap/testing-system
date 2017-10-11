@@ -6,7 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by yuri on 20.09.17.
+ *Tells {@link com.testing.system.dao.parsers.ResultSetParser} to parse field as
+ * {@code One} side in {@code OneToMany} relation
+ *
+ * @author yuri
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

@@ -2,6 +2,12 @@ package com.testing.system.dao.annotations.enums;
 
 import java.util.Date;
 
+
+/**
+ *Describes different ways {@code Date} could be parsed
+ *
+ * @author yuri
+ */
 public enum DateType {
 	DATE{
 		@Override

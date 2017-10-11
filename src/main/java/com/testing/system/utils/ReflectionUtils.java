@@ -9,7 +9,7 @@ import java.lang.reflect.Type;
 import java.util.function.Predicate;
 
 /**
- * Created by yuri on 22.09.17.
+ * Provide useful method for working with reflection api
  */
 public class ReflectionUtils {
 

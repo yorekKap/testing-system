@@ -6,11 +6,8 @@ import com.testing.system.entities.QuestionOption;
 import javax.sql.DataSource;
 import java.util.List;
 
-/**
- * Created by yuri on 03.10.17.
- */
 public class JdbcQuestionOptionDao extends AbstractJdbcDaoAdapter<QuestionOption>
-        implements QuestionOptionDao{
+        implements QuestionOptionDao {
 
     public JdbcQuestionOptionDao(DataSource dataSource) {
         super(dataSource, QuestionOption.class);

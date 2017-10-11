@@ -35,7 +35,6 @@ public class ObjectToColumnValueMapParser {
 	public static <T> Map<String, Object> parse(T object){
 		Map<String, Object> result = new HashMap<>();
 		Field[] fields = object.getClass().getDeclaredFields();
-
 		//iterating through each field annotated with Column annotation
 		//and parse it to the map entry
 		//ignore fields annotated with Id

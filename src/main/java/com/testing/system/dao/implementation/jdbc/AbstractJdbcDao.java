@@ -48,8 +48,19 @@ public abstract class AbstractJdbcDao<T extends Identified<Long>> implements Gen
      */
     protected JdbcQueryBuilder builder;
 
+    /**
+     * Class of the corresponding entity
+     */
     protected Class<T> clazz;
+
+    /**
+     * Table name for the corresponding entity
+     */
     protected String tableName;
+
+    /**
+     * Primary key column name for the corresponding entity
+     */
     protected String pkColumnName;
 
     public AbstractJdbcDao(DataSource dataSource, Class<T> clazz) {

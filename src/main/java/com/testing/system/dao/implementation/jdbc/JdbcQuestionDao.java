@@ -6,9 +6,6 @@ import com.testing.system.entities.Question;
 import javax.sql.DataSource;
 import java.util.List;
 
-/**
- * Created by yuri on 01.10.17.
- */
 public class JdbcQuestionDao extends AbstractJdbcDaoAdapter<Question> implements QuestionDao {
 
     public JdbcQuestionDao(DataSource dataSource) {

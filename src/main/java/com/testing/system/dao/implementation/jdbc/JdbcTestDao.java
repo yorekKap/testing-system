@@ -14,9 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by yuri on 29.09.17.
- */
 public class JdbcTestDao extends AbstractJdbcDaoAdapter<Test> implements TestDao {
 
     public JdbcTestDao(DataSource dataSource) {

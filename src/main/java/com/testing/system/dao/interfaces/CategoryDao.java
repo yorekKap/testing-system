@@ -5,7 +5,9 @@ import com.testing.system.entities.Category;
 import java.util.List;
 
 /**
- * Created by yuri on 27.09.17.
+ * DAO class for managing {@link Category} entities
+ *
+ * @author yuri
  */
 public interface CategoryDao extends GenericDao<Category, Long> {
     Category createCategory(String categoryTitle, Long userId);

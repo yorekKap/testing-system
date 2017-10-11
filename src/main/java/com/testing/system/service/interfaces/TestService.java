@@ -7,7 +7,11 @@ import com.testing.system.web.dto.CreateTestDto;
 import java.util.List;
 
 /**
- * Created by yuri on 29.09.17.
+ * Business layer API for convenient support of operations with {@link Test}
+ * entity.
+ *
+ * @author yuri
+ *
  */
 public interface TestService {
     List<Test> findAllByCategoryId(Long categoryId);

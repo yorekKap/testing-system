@@ -3,6 +3,7 @@ package com.testing.system.dao.parsers;
 import com.testing.system.dao.annotations.*;
 import com.testing.system.exceptions.dao.MySQLException;
 import com.testing.system.entities.Identified;
+import com.testing.system.exceptions.dao.ResultSetParserException;
 import com.testing.system.utils.ReflectionUtils;
 import org.apache.log4j.Logger;
 
@@ -17,7 +18,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Created by yuri on 23.09.17.
+ * Class for parsing result set into objects.
+ * Uses annotations for result set processing.
+ * Class to which result set is converted should satisfy such conditions:
+ * <ol>
+ * <li>Be annotated with {@link Table} annotation</li>
+ * <li>Have field annotated with {@link Id} annotation</li>
+ * <li>Have public constructor without parameters</li>
+ * </ol>
+ *
+ * @author yuri
  */
 public class ResultSetParser {
     private static final Logger log = Logger.getLogger(ResultSetParser.class);
@@ -56,6 +66,13 @@ public class ResultSetParser {
         }
     }
 
+    /**
+     * Parses result set into {@link List} {@code clazz} object
+     *
+     * @param clazz {@link Class} to which result set should be converted
+     * @param <T>
+     * @return {@link List} of parsed objects
+     */
     public <T extends Identified<Long>> List<T> parse(Class<T> clazz) {
         try {
             return parse(clazz, null, null);
@@ -68,6 +85,19 @@ public class ResultSetParser {
         }
     }
 
+    /**
+     * Parses result set into {@link List} {@code clazz} object.
+     * Use foreign key column name and value for parsing only rows that
+     * retains to particular parent table.
+     * Used for recursive parsing of the complicated objects.
+     *
+     * @param clazz    {@link Class} to which result set should be parse
+     * @param fkColumn name of foreign key column
+     * @param fkValue  value of foreign key column. Only rows with this foreign key
+     *                 will be parsed. If null - parse all rows.
+     * @param <T>
+     * @return {@link List} of parsed objects
+     */
     private <T> List<T> parse(Class<T> clazz, String fkColumn, Long fkValue) {
         List<Object> result = new ArrayList<>();
 
@@ -97,16 +127,10 @@ public class ResultSetParser {
                 }
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
+        } catch (SQLException | InvocationTargetException |
+                NoSuchMethodException | InstantiationException | IllegalAccessException e) {
+
+            throw new ResultSetParserException(e.getMessage());
         }
 
         return result.stream()
@@ -114,14 +138,30 @@ public class ResultSetParser {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Parse single row to specified {@link Class}
+     *
+     * @param clazz             {@link Class} to which row should be parsed
+     * @param columnNamesMapper currently used @{link {@link ColumnNamesMapper}}
+     * @param ignoredOneToMany  column name of foreign keys that signalize that {@code oneToMany}
+     *                          bidirectional relation is currently parsing and paring of the
+     *                          {@code one} side of the relation should be therefore avoided,
+     *                          the job will be fully done on the {@code many} side
+     * @return
+     * @throws SQLException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     * @throws NoSuchMethodException
+     * @throws InvocationTargetException
+     */
     private Identified<Long> parseRow(Class<?> clazz, ColumnNamesMapper columnNamesMapper, String ignoredOneToMany) throws SQLException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
-        Field idField = getIdField(clazz, columnNamesMapper);
+        Field idField = getIdField(clazz);
         idField.setAccessible(true);
 
         Integer columnIndex = columnNamesMapper
                 .getColumnIndex(idField.getAnnotation(Id.class).name());
 
-        if(columnIndex == null){
+        if (columnIndex == null) {
             return null;
         }
 
@@ -147,7 +187,14 @@ public class ResultSetParser {
         return newObject;
     }
 
-    private Field getIdField(Class clazz, ColumnNamesMapper columnNamesMapper) throws SQLException {
+    /**
+     * Get field annotated with {@link Id} annotation of the @{code clazz}
+     *
+     * @param clazz {@link Class} where field should be
+     * @return {@link Field} annotated with {@link Id} annotation
+     * @throws SQLException if no field annotated with {@link Id} is found
+     */
+    private Field getIdField(Class clazz) throws SQLException {
         Field idField = ReflectionUtils.findFieldAnnotatedWith(clazz, Id.class);
 
         if (idField == null) {
@@ -158,33 +205,64 @@ public class ResultSetParser {
     }
 
 
+    /**
+     * Parses column to the corresponding value.
+     *
+     * @param field             {@link Field} that describes how column should be parsed
+     * @param columnNamesMapper used {@link ColumnNamesMapper}
+     * @param actualObject      {@link Object} that is currently parsed
+     * @param ignoredOneToMany  see {@see parseRow}
+     * @return parsed value
+     * @throws SQLException
+     * @throws NoSuchMethodException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     * @throws InstantiationException
+     */
     private Object parseColumn(Field field, ColumnNamesMapper columnNamesMapper,
                                Identified actualObject, String ignoredOneToMany) throws SQLException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         Object value = null;
 
         Column column;
+
+        //chooses method to parse field based on the annotation
         if ((column = field.getAnnotation(Column.class)) != null) {
             value = rs.getObject(columnNamesMapper.getColumnIndex(column.value()));
 
             if (field.isAnnotationPresent(ParseEnum.class)) {
                 value = parseEnum(field, value);
+
             } else if (field.getType().equals(Long.class) && value != null) {
                 value = new Long((Integer) value);
+
             } else if (field.getType().equals(Double.class) && value != null) {
                 value = ((BigDecimal) value).doubleValue();
             }
 
+
         } else if (field.isAnnotationPresent(OneToMany.class)) {
             value = parseOneToMany(field, actualObject, ignoredOneToMany);
+
         } else if (field.isAnnotationPresent(ManyToOne.class)) {
             value = parseManyToOne(field, columnNamesMapper, actualObject);
-        } else if (field.isAnnotationPresent(ManyToMany.class)){
+
+        } else if (field.isAnnotationPresent(ManyToMany.class)) {
             value = parseManyToMany(field, actualObject);
         }
 
         return value;
     }
 
+    /**
+     * Parse {@code value} to the enum class of {@code field}
+     *
+     * @param field describes enum
+     * @param value to be parsed
+     * @return parsed value
+     * @throws NoSuchMethodException
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     */
     private Object parseEnum(Field field, Object value) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Class<?> enumClass = field.getType();
         Method valueOf = enumClass.getDeclaredMethod("valueOf", String.class);
@@ -192,6 +270,13 @@ public class ResultSetParser {
         return valueOf.invoke(null, value);
     }
 
+    /**
+     * Parse {@code ManyToMany} relation
+     *
+     * @param field        describes relation
+     * @param actualObject
+     * @return parsed value
+     */
     private Object parseManyToMany(Field field, Identified<Long> actualObject) {
         ManyToMany manyToMany = field.getAnnotation(ManyToMany.class);
 
@@ -206,6 +291,15 @@ public class ResultSetParser {
         return value;
     }
 
+
+    /**
+     * Parse {@code OneToMany} relation
+     *
+     * @param field            describes relation
+     * @param actualObject
+     * @param ignoredOneToMany see {@see parseRow}
+     * @return parsed value
+     */
     private Object parseOneToMany(Field field, Identified<Long> actualObject, String ignoredOneToMany) {
         OneToMany oneToMany = field.getAnnotation(OneToMany.class);
 
@@ -231,6 +325,14 @@ public class ResultSetParser {
         return value;
     }
 
+    /**
+     * Parse {@code OneToMany} relation
+     *
+     * @param field             describes relation
+     * @param columnNamesMapper currently used {@link ColumnNamesMapper}
+     * @param actualObject
+     * @return parsed value
+     */
     private Object parseManyToOne(Field field, ColumnNamesMapper columnNamesMapper,
                                   Object actualObject) throws SQLException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         ManyToOne manyToOne = field.getAnnotation(ManyToOne.class);

@@ -6,7 +6,8 @@ import com.testing.system.entities.Identified;
 import javax.sql.DataSource;
 
 /**
- * Created by yuri on 27.09.17.
+ * Adapter class for ruling out need for the implementing
+ * of optional methods of {@link AbstractJdbcDao}
  */
 public abstract class AbstractJdbcDaoAdapter<T extends Identified<Long>>
         extends AbstractJdbcDao<T> {

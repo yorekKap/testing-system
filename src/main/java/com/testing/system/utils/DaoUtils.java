@@ -5,7 +5,7 @@ import com.testing.system.dao.annotations.Table;
 import com.testing.system.exceptions.dao.MySQLException;
 
 /**
- * Created by yuri on 27.09.17.
+ * Provide convenient way to get corresponding db info from class
  */
 public class DaoUtils {
 

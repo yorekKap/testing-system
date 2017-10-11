@@ -8,7 +8,11 @@ import com.testing.system.entities.User;
 import java.util.Date;
 
 /**
- * Created by yuri on 08.10.17.
+ *
+ * Used for fetching {@link com.testing.system.entities.TestRecord} with {@link User}
+ * from database
+ *
+ * @author yuri
  */
 @Table("test_records")
 public class TestRecordWithStudentInfoDto implements Identified<Long> {

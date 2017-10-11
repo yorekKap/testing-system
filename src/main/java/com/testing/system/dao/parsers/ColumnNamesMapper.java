@@ -6,8 +6,12 @@ import com.testing.system.exceptions.dao.MySQLException;
 import java.util.Map;
 import java.util.Optional;
 
+
 /**
- * Created by yuri on 23.09.17.
+ * Class that manages column names mapping and resolving for
+ * the need of {@link ResultSetParser}
+ *
+ * @author yuri
  */
 public class ColumnNamesMapper {
 
