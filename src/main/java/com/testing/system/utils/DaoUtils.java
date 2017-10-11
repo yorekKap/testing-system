@@ -8,6 +8,7 @@ import com.testing.system.exceptions.dao.MySQLException;
  * Created by yuri on 27.09.17.
  */
 public class DaoUtils {
+
     public static String getTableName(Class<?> clazz){
         Table table = clazz.getAnnotation(Table.class);
         if(table == null){

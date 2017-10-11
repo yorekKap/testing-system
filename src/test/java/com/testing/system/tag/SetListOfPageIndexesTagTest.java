@@ -25,7 +25,6 @@ import static org.mockito.Mockito.verify;
 public class SetListOfPageIndexesTagTest {
 
 	private static final String LIST_ATTRIBUTE_NAME = "records";
-	private static final String JSP_EXCEPTION_INVALID_INDEX_MESSAGE = "Bad index: ";
 
 	@Mock
 	JspContext jspContext;

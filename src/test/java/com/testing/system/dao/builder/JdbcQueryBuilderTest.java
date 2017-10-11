@@ -12,75 +12,77 @@ import static org.mockito.Mockito.when;
 
 public class JdbcQueryBuilderTest {
 
-	static JdbcQueryBuilder builder;
+    static JdbcQueryBuilder builder;
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		DataSource mockDataSource = Mockito.mock(DataSource.class);
-		Connection mockConnection = Mockito.mock(Connection.class);
+    @BeforeClass
+    public static void setUpBeforeClass() throws Exception {
+        DataSource mockDataSource = Mockito.mock(DataSource.class);
+        Connection mockConnection = Mockito.mock(Connection.class);
 
-		when(mockDataSource.getConnection()).thenReturn(mockConnection);
+        when(mockDataSource.getConnection()).thenReturn(mockConnection);
 
-		builder = new JdbcQueryBuilder(mockDataSource);
-	}
+        builder = new JdbcQueryBuilder(mockDataSource);
+    }
 
-	@Test
-	public void select(){
-		String expectedQuery = "SELECT * FROM services;";
+    @Test
+    public void select() {
+        String expectedQuery = "SELECT * FROM tests;";
 
-		String query =	builder.select("*").from("services").toString();
+        String query = builder.select("*").from("tests").toString();
 
-		assertEquals(expectedQuery, query);
-	}
+        assertEquals(expectedQuery, query);
+    }
 
-	@Test
-	public void selectWithWhere(){
-		String expectedQuery = "SELECT * FROM admins WHERE id >2.0;";
+    @Test
+    public void selectWithWhere() {
+        String expectedQuery = "SELECT * FROM tests WHERE id  > ? ;";
 
-	    String query =	builder.select("*").from("admins")
-	    		       						.where("id")
-	    		       						.greater(2)
-	    		       						.toString();
+        String query = builder.select("*").from("tests")
+                .where("id")
+                .greater(2)
+                .toString();
 
-	    assertEquals(expectedQuery, query);
-	}
+        assertEquals(expectedQuery, query);
+    }
 
 
-	@Test
-	public void update(){
-		String expectedQuery = " UPDATE services SET description =  ?, title =  ? WHERE id  = 2.0;";
+    @Test
+    public void update() {
+        String expectedQuery = " UPDATE users SET last_name =  ?, first_name =  ? WHERE id  = ? ;";
 
-		String query = builder.update("services").set("title", "Change number")
-												 .set("description", "Number should be changed")
-												 .where("id").isEquals(new Double(2))
-												 .toString();
-		assertEquals(expectedQuery, query);
-	}
+        String query = builder.update("users")
+                .set("first_name", "Vakula")
+                .set("last_name", "Koval")
+                .where("id").isEquals(new Double(2))
+                .toString();
 
-	@Test
-	public void delete(){
-		String expectedQuery = "DELETE FROM services\n" +
-				" WHERE title  = 'Change number' AND description LIKE '%changed';";
+        assertEquals(expectedQuery, query);
+    }
 
-		String query = builder.delete().from("services")
-									   .where("title")
-									   .isEquals("Change number")
-									   .and("description")
-									   .like("%changed")
-									   .toString();
+    @Test
+    public void delete() {
+        String expectedQuery = "DELETE FROM users\n" +
+                " WHERE user_name  = ?  AND last_name LIKE '%Koval';";
 
-		assertEquals(expectedQuery, query);
-	}
+        String query = builder.delete().from("users")
+                .where("user_name")
+                .isEquals("Vakula")
+                .and("last_name")
+                .like("%Koval")
+                .toString();
 
-	@Test
-	public void deleteWithInnerQuery(){
-		String expectedQuery = "DELETE FROM service_bids\n"+
-		" WHERE service_id IN (SELECT max(id) FROM services);";
+        assertEquals(expectedQuery, query);
+    }
 
-		SelectQuery sq = builder.select("max(id)").from("services");
-		String query =  builder.delete().from("service_bids").where("service_id").in(sq).toString();
+    @Test
+    public void deleteWithInnerQuery() {
+        String expectedQuery = "DELETE FROM test_records\n" +
+                " WHERE test_id IN (SELECT MAX(id) FROM tests);";
 
-		assertEquals(expectedQuery, query);
-	}
+        SelectQuery sq = builder.select("MAX(id)").from("tests");
+        String query = builder.delete().from("test_records").where("test_id").in(sq).toString();
+
+        assertEquals(expectedQuery, query);
+    }
 
 }
