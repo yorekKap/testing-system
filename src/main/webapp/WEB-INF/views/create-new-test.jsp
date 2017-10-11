@@ -14,6 +14,9 @@
 <fmt:message key="tutor.categories.tests.new-test.is-right" var="isRight"/>
 <fmt:message key="tutor.categories.tests.new-test.add-option" var="addOption"/>
 <fmt:message key="tutor.categories.tests.new-test.add-question" var="addQuestion"/>
+<fmt:message key="tutor.categories.tests.new-test.error-message" var="errorMessage"/>
+
+
 
 <html>
 <head>
@@ -24,9 +27,10 @@
 <div id=wrapper class="toggled">
     <%@ include file="/resources/jspf/sidebar.jspf" %>
 
+
     <div id="page-content-wrapper">
         <div class="container-fluid" id="create-new-test">
-            <form class="form-horizontal">
+            <form id="create-test-form" class="form-horizontal">
                 <div class="form-group">
                     <div class="col-md-1">
                         <label class="control-label">${testTitle}</label>
@@ -61,7 +65,7 @@
                     <div class="col-md-4">
                         <input class="form-control" id="question-mark" name="questionMark"
                                placeholder="${questionMark}" required="true"
-                               tabindex="1" type="number" rv-value="data.newQuestion.mark">
+                               min="1" max="1000" type="number" rv-value="data.newQuestion.mark">
                     </div>
                     <div class="col-md-1">
                         <button rv-on-click="controller.addQuestion" type="button" class="btn btn-default addButton"><i
@@ -81,7 +85,7 @@
                     <label class="col-md-1 control-label" for="option-text">${option}</label>
                     <div class="col-md-4">
                         <input class="form-control col-md-4" type="text" id="option-text"
-                               rv-value="data.newOption.text">
+                               rv-value="data.newOption.text" required>
                     </div>
                     <div class="checkbox col-md-2">
                         <input id="is-right" class="checkbox-default" type="checkbox"
@@ -103,6 +107,7 @@
                 </a>
 
             </form>
+            <div id="error-message" hidden>${errorMessage}</div>
         </div>
     </div>
 </div>

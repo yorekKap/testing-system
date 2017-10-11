@@ -45,18 +45,17 @@ public class TutorTestsController extends Controller{
     }
 
     public void createTest(RequestService requestService){
-        CreateTestDto createTestDto = requestService.
+        CreateTestDto dto = requestService.
                 getContentAsObject(CreateTestDto.class);
 
-        testService.createTest(createTestDto);
+        testService.createTest(dto.getCategoryId(), dto.getTitle(), dto.getQuestions());
     }
 
     public void updateTest(RequestService requestService){
         String title = requestService.getString("title");
         Long id = requestService.getLong("id");
-        Integer orderNumber = requestService.getInteger("orderNumber");
 
-        testService.updateTest(id, title, orderNumber);
+        testService.updateTest(id, title);
     }
 
     public void deleteTest(RequestService requestService){

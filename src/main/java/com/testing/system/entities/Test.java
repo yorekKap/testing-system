@@ -16,15 +16,11 @@ public class Test implements Identified<Long> {
     @Column("title")
     private String title;
 
-    @Column("order_number")
-    private Integer orderNumber;
-
     public Test() {}
 
-    public Test(Long id, String title, Integer orderNumber) {
+    public Test(Long id, String title) {
         this.id = id;
         this.title = title;
-        this.orderNumber = orderNumber;
     }
 
     public Long getId() {
@@ -43,20 +39,11 @@ public class Test implements Identified<Long> {
         this.title = title;
     }
 
-    public Integer getOrderNumber() {
-        return orderNumber;
-    }
-
-    public void setOrderNumber(Integer orderNumber) {
-        this.orderNumber = orderNumber;
-    }
-
     @Override
     public String toString() {
         return "Test{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", orderNumber=" + orderNumber +
                 '}';
     }
 }

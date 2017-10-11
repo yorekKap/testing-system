@@ -113,7 +113,6 @@
     requestTestEdits.push({
         isEditable: false,
         title: "${test.title}",
-        orderNumber: ${test.orderNumber},
         id: ${test.id}
     });
 

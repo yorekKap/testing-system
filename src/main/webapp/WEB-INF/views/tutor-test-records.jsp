@@ -7,6 +7,12 @@
 <fmt:message key="tutor.test-records.record-date" var="recordDate"/>
 <fmt:message key="tutor.test-records.record-mark" var="recordMark"/>
 <fmt:message key="tutor.test-records.no-test-records" var="noTestRecords"/>
+<fmt:message key="tutor.test-records.search-for" var="searchFor"/>
+<fmt:message key="tutor.test-records.searching-for" var="searchingFor"/>
+<fmt:message key="tutor.test-records.no-entries-found" var="noEntriesFound"/>
+<fmt:message key="tutor.test-records.show-test-record" var="showTestRecord"/>
+
+
 
 <html>
 <head>
@@ -30,7 +36,7 @@
                     <c:if test="${not empty testRecords}">
                         <form action="#" method="get">
                             <div class="input-group">
-                                <input class="form-control" id="system-search" name="q" placeholder="Search for"
+                                <input class="form-control" id="system-search" name="q" placeholder="${searchFor}"
                                        required>
                                 <span class="input-group-btn">
                         <button type="submit" class="btn btn-default"><i
@@ -46,6 +52,7 @@
                                 <th>${username}</th>
                                 <th>${recordDate}</th>
                                 <th>${recordMark}</th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -56,6 +63,11 @@
                                     <td>${testRecord.student.username}</td>
                                     <td>${testRecord.date}</td>
                                     <td>${testRecord.mark}</td>
+                                    <td>
+                                        <a href="/tutor/category/test/test-record?testRecordId=${testRecord.id}">
+                                                ${showTestRecord  }
+                                        </a>
+                                    </td>
                                 </tr>
                             </c:forEach>
                             </tbody>
@@ -66,7 +78,11 @@
         </div>
         <!-- /#page-content-wrapper -->
     </div>
-    <script src="/resources/js/table-search.js"></script>
+    <script type="text/javascript">
+        var searchingFor = "${searchingFor}";
+        var noEntriesFound = "${noEntriesFound}";
+    </script>
+    <script type="text/javascript" src="/resources/js/table-search.js"></script>
 </body>
 </html>
 

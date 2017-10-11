@@ -16,11 +16,11 @@ import java.util.List;
 public interface TestService {
     List<Test> findAllByCategoryId(Long categoryId);
 
-    void createTest(CreateTestDto createTestDto);
+    void createTest(Long categoryId, String title, List<Question> questions);
 
     Long passTest(Long userId, Long testId, List<Long> selectedOptionIds);
 
-    void updateTest(Long id, String title, Integer orderNumber);
+    void updateTest(Long id, String title);
 
     void deleteTest(Long testId);
 }

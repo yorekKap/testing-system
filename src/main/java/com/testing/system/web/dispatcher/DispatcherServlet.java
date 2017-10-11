@@ -1,6 +1,7 @@
 package com.testing.system.web.dispatcher;
 
 import com.testing.system.exceptions.dispatcher.BadRequestException;
+import com.testing.system.exceptions.validation.ValidationException;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -55,6 +56,13 @@ public class DispatcherServlet extends HttpServlet {
 			} catch (IOException e1) {
 				log.error("IOException in DispatcherServlet : ", e);
 			}
+		} catch (ValidationException e){
+			try {
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+				log.warn("Validation failed");
+			} catch (IOException e1) {
+				log.error("IOException in DispatcherServlet : ", e);
+			};
 		}
 
 	}

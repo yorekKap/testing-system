@@ -18,7 +18,9 @@
 <head>
     <title>Login</title>
     <%@ include file="/resources/jspf/setup.jspf" %>
-    <link rel="stylesheet" type="text/css" href="resources/css/login-style.css"/>
+    <link rel="stylesheet" type="text/css" href="/resources/css/login-style.css"/>
+    <script src="/resources/js/lib/jquery.form-error.js"></script>
+    <script src="/resources/js/login.js"></script>
 </head>
 <body>
 <a href="/login?lang=ua">ua</a> | <a href="/login?lang=en">en</a>
@@ -54,6 +56,10 @@
     </div>
 </div>
 
+<c:if test="${fail eq 'wrong-username' || fail eq 'wrong-password'}">
+    <p id="iusername">${w_username}</p>
+    <p id="ipassword">${wpassword}</p>
+</c:if>
 </body>
 <c:if test="${fail == 'wrong-username'}">
     <script type="text/javascript">

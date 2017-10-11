@@ -38,7 +38,6 @@ var controller = {
         $.post("/tutor/category/test", {
             action: "UPDATE",
             title: testTitle,
-            orderNumber: testEdit.orderNumber,
             id: testEdit.id
         }).then(function () {
             location.reload();

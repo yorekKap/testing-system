@@ -48,6 +48,7 @@ public class WebConfig implements Config {
 
         CategoryTestsController categoryTestsController = new CategoryTestsController(testService, categoryService);
         ProfileInfoController profileInfoController = new ProfileInfoController(userService);
+        DescribeTestRecordController describeTestRecordController = new DescribeTestRecordController(questionService, questionOptionService);
 
         ControllersMapper controllersMapper = ControllersMapper.createBuilder()
                 .add("/login", new LoginController(authService))
@@ -59,9 +60,10 @@ public class WebConfig implements Config {
                 .add("/tutor/category", categoryTestsController)
                 .add("/tutor/category/test", new TutorTestsController(testService))
                 .add("/tutor/category/test/records", new TutorTestRecordsController(testRecordService))
+                .add("/tutor/category/test/test-record", describeTestRecordController)
                 .add("/student/category", categoryTestsController)
                 .add("/student/category/tests/pass-test", new PassTestController(questionService, testService))
-                .add("/student/category/tests/test-record", new DescribeTestRecordController(questionService, questionOptionService))
+                .add("/student/category/tests/test-record", describeTestRecordController)
                 .add("/student/category/tests/test-records", new StudentTestRecordsController(testRecordService))
                 .build();
 

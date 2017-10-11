@@ -2,20 +2,30 @@ var data = {
     categoryId: requestCategoryId,
     testTitle: "",
     questions: [],
+
     newQuestion: {
         text: "",
         mark: 0,
         options: []
     },
+
     newOption: {
         text: "",
         isRight: false
     }
-
 };
+
+var FORM_ID = "#create-test-form";
 
 var controller = {
     addQuestion: function (event, model) {
+        if (!($("#question-text")[0].checkValidity() &&
+            $("#question-mark")[0].checkValidity() &&
+            data.newQuestion.options.length !== 0)) {
+
+            return;
+        }
+
         data.newQuestion.orderNumber = data.questions.length + 1;
         data.newQuestion.mark = parseInt(data.newQuestion.mark);
         data.questions.push(jQuery.extend(true, {}, data.newQuestion));
@@ -28,6 +38,10 @@ var controller = {
     },
 
     addOption: function (event, model) {
+        if (!$("#option-text")[0].checkValidity()) {
+            return;
+        }
+
         data.newQuestion.options.push(data.newOption);
 
         data.newOption = {
@@ -45,10 +59,14 @@ var controller = {
     },
 
     createNewTest: function (event, model) {
+        if (!($("#test-title")[0].checkValidity() && data.questions.length !== 0)){
+            return;
+        }
+
         $.post("/tutor/category/test", {
             action: "CREATE",
             content: JSON.stringify({
-                    title: data.testTitle, orderNumber: 1,
+                    title: data.testTitle,
                     questions: data.questions,
                     categoryId: data.categoryId
                 }
@@ -57,6 +75,9 @@ var controller = {
             .then(function () {
                 window.location = "/tutor/category?categoryId=" + data.categoryId;
             })
+            .catch(function (error) {
+                $("#error-message").show();
+        });
     }
 };
 

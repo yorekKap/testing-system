@@ -11,3 +11,4 @@
 <fmt:message key="sidebar.categories-title" var="categoriesTitle"/>
 <fmt:message key="sidebar.create-new-category" var="createNewCategory"/>
 <fmt:message key="sidebar.new-category-title" var="newCategoryTitle"/>
+<fmt:message key="sidebar.logout" var="logout"/>

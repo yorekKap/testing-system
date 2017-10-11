@@ -16,7 +16,7 @@ $(document).ready(function() {
             if(inputText != '')
             {
                 $('.search-query-sf').remove();
-                tableBody.prepend('<tr class="search-query-sf"><td colspan="6"><strong>Searching for: "'
+                tableBody.prepend('<tr class="search-query-sf"><td colspan="6"><strong>' + searchingFor + '"'
                     + $(that).val()
                     + '"</strong></td></tr>');
             }
@@ -40,7 +40,7 @@ $(document).ready(function() {
         //all tr elements are hidden
         if(tableRowsClass.children(':visible').length == 0)
         {
-            tableBody.append('<tr class="search-sf"><td class="text-muted" colspan="6">No entries found.</td></tr>');
+            tableBody.append('<tr class="search-sf"><td class="text-muted" colspan="6">' +noEntriesFound+ '</td></tr>');
         }
     });
 });

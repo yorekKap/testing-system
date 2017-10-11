@@ -34,8 +34,8 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public void createTest(CreateTestDto createTestDto) {
-        testDao.createTest(createTestDto);
+    public void createTest(Long categoryId, String title, List<Question> questions) {
+        testDao.createTest(categoryId, title, questions);
     }
 
     @Override
@@ -66,8 +66,8 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public void updateTest(Long id, String title, Integer orderNumber) {
-        testDao.update(new Test(id, title, orderNumber));
+    public void updateTest(Long id, String title) {
+        testDao.update(new Test(id, title));
     }
 
     @Override

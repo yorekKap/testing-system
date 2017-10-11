@@ -46,7 +46,7 @@
         </div>
 
         <div style="margin-top: 600px; text-align: center">
-            <a href="/logout">Logout</a><br/>
+            <a href="/logout">${logout}</a><br/>
             <a href="#" onclick="changeLang('ua')">ua</a>|<a href="#" onclick="changeLang('en')">en</a>
         </div>
 

@@ -1,9 +1,11 @@
 package com.testing.system.web.dispatcher;
 
+import com.testing.system.config.WebAppContext;
 import com.testing.system.exceptions.web.BadRequestExceptionBuilder;
 import com.testing.system.web.dispatcher.enums.ActionType;
 import com.testing.system.web.parsers.JsonParser;
 import com.testing.system.web.parsers.RequestContentParser;
+import com.testing.system.web.validators.ValidatorFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
@@ -19,10 +21,12 @@ public class RequestService {
 
     private HttpServletRequest request;
     private SessionService sessionService;
+    private ValidatorFactory validatorFactory;
 
     public RequestService(HttpServletRequest request) {
         this.request = request;
         this.sessionService = new SessionService(request.getSession());
+        this.validatorFactory = WebAppContext.get(ValidatorFactory.class);
     }
 
 
@@ -100,11 +104,20 @@ public class RequestService {
     }
 
     public <T> T getParametersAsObject(Class<T> clazz) {
-        return RequestContentParser.parse(request, clazz);
+        T object = RequestContentParser.parse(request, clazz);
+        validatorFactory.getValidator(clazz)
+                .ifPresent(v -> v.validate(object));
+
+        return object;
     }
 
     public <T> T getContentAsObject(Class<T> clazz) {
-        return JsonParser.parse(clazz, request.getParameter(CONTENT_PARAMETER));
+        T object = JsonParser.parse(clazz, request.getParameter(CONTENT_PARAMETER));
+
+        validatorFactory.getValidator(clazz)
+                .ifPresent(v -> v.validate(object));
+
+        return object;
     }
 
     public String getContentAsString() {

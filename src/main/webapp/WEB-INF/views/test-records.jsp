@@ -3,6 +3,7 @@
 <fmt:message key="test-records.title" var="title"/>
 <fmt:message key="test-records.date" var="date"/>
 <fmt:message key="test-records.mark" var="mark"/>
+<fmt:message key="test-records.no-test-records" var="noTestRecords"/>
 
 <html>
 <head>
@@ -20,6 +21,9 @@
             <div class="container">
                 <div id="pass-test">
                     <ol>
+                        <c:if test="${empty testRecords}">
+                            ${noTestRecords}
+                        </c:if>
                         <c:forEach var="testRecord" items="${testRecords}">
                             <a href="/student/category/tests/test-record?testRecordId=${testRecord.id}">
                                 <div>

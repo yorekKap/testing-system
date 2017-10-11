@@ -1,5 +1,6 @@
 package com.testing.system.dao.interfaces;
 
+import com.testing.system.entities.Question;
 import com.testing.system.entities.Test;
 import com.testing.system.web.dto.CreateTestDto;
 
@@ -13,6 +14,6 @@ import java.util.List;
 public interface TestDao extends GenericDao<Test, Long> {
     List<Test> findAllByCategoryId(Long categoryId);
 
-    void createTest(CreateTestDto createTestDto);
+    void createTest(Long categoryId, String title, List<Question> questions);
 
 }

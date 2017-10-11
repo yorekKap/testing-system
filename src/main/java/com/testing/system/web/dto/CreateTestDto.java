@@ -35,28 +35,11 @@ public class CreateTestDto {
         this.title = title;
     }
 
-    public Integer getOrderNumber() {
-        return orderNumber;
-    }
-
-    public void setOrderNumber(Integer orderNumber) {
-        this.orderNumber = orderNumber;
-    }
-
     public List<Question> getQuestions() {
         return questions;
     }
 
     public void setQuestions(List<Question> questions) {
         this.questions = questions;
-    }
-
-    @Override
-    public String toString() {
-        return "CreateTestDto{" +
-                "title='" + title + '\'' +
-                ", orderNumber=" + orderNumber +
-                ", questions=" + questions +
-                '}';
     }
 }

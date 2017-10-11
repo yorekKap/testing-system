@@ -28,15 +28,14 @@ public class JdbcTestDao extends AbstractJdbcDaoAdapter<Test> implements TestDao
     }
 
     @Override
-    public void createTest(CreateTestDto createTestDto) {
+    public void createTest(Long categoryId, String title, List<Question> questions) {
         try {
             builder.beginTransaction();
 
             builder.insert()
                     .newValuesList()
-                    .addValue("category_id", createTestDto.getCategoryId())
-                    .addValue("title", createTestDto.getTitle())
-                    .addValue("order_number", createTestDto.getOrderNumber())
+                    .addValue("category_id", categoryId)
+                    .addValue("title", title)
                     .execute();
 
             Long testId = getLastSavedId();
@@ -44,7 +43,7 @@ public class JdbcTestDao extends AbstractJdbcDaoAdapter<Test> implements TestDao
             InsertQuery questionsInsertQuery = builder.insert()
                     .into("questions");
 
-            for (Question question : createTestDto.getQuestions()) {
+            for (Question question : questions) {
                 questionsInsertQuery.newValuesList()
                         .addValue("text", question.getText())
                         .addValue("order_number", question.getOrderNumber())
@@ -66,7 +65,7 @@ public class JdbcTestDao extends AbstractJdbcDaoAdapter<Test> implements TestDao
 
             InsertQuery optionsInsertQuery = builder.insert()
                     .into("question_options");
-            for (Question question : createTestDto.getQuestions()) {
+            for (Question question : questions) {
                 for (QuestionOption option : question.getOptions()) {
                     optionsInsertQuery.newValuesList()
                             .addValue("text", option.getText())
